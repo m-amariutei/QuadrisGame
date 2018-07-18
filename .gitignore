@@ -7,6 +7,12 @@
 *.o
 *.obj
 
+# Clion Files
+*.idea
+*.make
+*.cmake
+cmake-build-debug/
+
 # Precompiled Headers
 *.gch
 *.pch
