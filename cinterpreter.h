@@ -6,6 +6,8 @@
 
 using namespace std;
 
+class QuadrisBoard;
+
 class Interpreter {
 
     string currentCommand;

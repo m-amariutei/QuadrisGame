@@ -11,7 +11,7 @@ QuadrisBoard::QuadrisBoard() {
 	}
 
 	currentBlockIndex = -1;	//no blocks
-	//levels 
+	levels = new Level(0);
 	//display
 }
 
@@ -34,7 +34,7 @@ void QuadrisBoard::setBoard(vector<vector<Cell *>> newBoard) {
 }
 
 vector<Block *> QuadrisBoard::getBlocksOnBoard() {
-	return blocksOnBoard();
+	return blocksOnBoard;
 }
 
 void QuadrisBoard::setBlocksOnBoard(vector<Block *> newBlocksOnBoard) {
@@ -49,11 +49,11 @@ void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) {
 	currentBlockIndex = newCurrentBlockIndex;
 }
 
-vector<Level> QuadrisBoard::getLevels() {
+Level* QuadrisBoard::getLevels() {
 	return levels;
 }
 
-void QuadrisBoard::setLevels(vector<Level> newLevels) {
+void QuadrisBoard::setLevels(Level* newLevels) {
 	levels = newLevels;
 }
 
@@ -80,7 +80,7 @@ void QuadrisBoard::print(bool seeInvisible) {
 
 	for(int i=begRow; i<HEIGHT; i++) {
 		for(int j=0; j<WIDTH; j++) {
-			Block* block = cout<<board.at(i).at(j)->getBlock();
+			Block* block = board.at(i).at(j)->getBlock();
 			if(block != NULL) {
 				cout<<block->getName();
 			} else {
@@ -105,9 +105,9 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 }
 
 bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
-	for(int j=0; j<block->getCells().length(); j++) {
-		if(block->getCells().at(j)->xValue == x &&
-			block->getCells().at(j)->yValue == y) {
+	for(int j=0; j<block->getCells().size(); j++) {
+		if(block->getCells().at(j)->getXValue() == x &&
+			block->getCells().at(j)->getYValue() == y) {
 			vector<Cell*>::iterator itt = block->getCells().begin() + j;
 			block->getCells().erase(itt);
 			return true;
@@ -158,13 +158,13 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	//find Cell* in block that is above and replace it with a Cell* of the cell below
 	bool wasDeletedSuccessfully = deleteCellFromBlock(blockTop, cellTop->getXValue(), cellDown->getYValue());
 	if(!wasDeletedSuccessfully) cerr << "quadrisboard.cc/dropTop: deleteCellFromBlock failed" <<endl;
-	blockTop->getCells()->push_back(cellDown);
+	blockTop->getCells().push_back(cellDown);
 }
 
 bool QuadrisBoard::isBlockStuck(Block* block) {
 	//return true iff below any cell occupied by this block, there is a cell occupied by another block or board ends
-	for(int i=0; i<block->getCells().length(); i++) {
-		if(cellBelowIsSticky(block, block->getCells.at(i).getXValue(), block->getCells.at(i).getYValue())) return true;
+	for(int i=0; i<block->getCells().size(); i++) {
+		if(cellBelowIsSticky(block, block->getCells().at(i)->getXValue(), block->getCells().at(i)->getYValue())) return true;
 	}
 	return false;
 }

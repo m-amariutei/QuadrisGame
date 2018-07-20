@@ -10,10 +10,10 @@ include_directories(${X11_INCLUDE_DIR})
 add_executable(
         QuadrisGame
         main.cc
+        cell.h cell.cc
         block.h block.cc
         quadrisboard.h quadrisboard.cc
         level.cc level.h
-        cell.h cell.cc
         window.h window.cc
         cinterpreter.cc cinterpreter.h
         display.h display.cc

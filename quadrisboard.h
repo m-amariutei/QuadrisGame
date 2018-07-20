@@ -12,13 +12,16 @@
 
 using namespace std;
 
+class Interpreter;
+class Level;
+
 class QuadrisBoard {
 
     vector<vector<Cell *>> board; //11x18
     vector<Block *> blocksOnBoard;
     int currentBlockIndex;
     //map<string, Command*> commandMap;
-    vector<Level> levels;
+    Level* levels;
     int currentLevel;
     //Display display;
 
@@ -31,8 +34,8 @@ public:
     void setBlocksOnBoard(vector<Block *> newBlocksOnBoard);
     int getCurrentBlockIndex();
     void setCurrentBlockIndex(int newCurrentBlockIndex);
-    vector<Level> getLevels();
-    void setLevels(vector<Level> newLevels);
+    Level* getLevels();
+    void setLevels(Level* newLevels);
     int getCurrentLevel();
     void setCurrentLevel(int newCurrentLevel);
 

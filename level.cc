@@ -65,6 +65,8 @@ char Level::otherLevelBlock() {
             return blocks[i];
         }
     }
+
+    return blocks[0];
 }
 
 

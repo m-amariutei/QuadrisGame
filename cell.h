@@ -12,6 +12,12 @@ class Cell {
 public:
     Cell();
 
+    Block * getBlock();
+    void setBlock(Block *block);
+
+    int getXValue();
+    int getYValue();
+
     char getBlockType();
 
     ~Cell();

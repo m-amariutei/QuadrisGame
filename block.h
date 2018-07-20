@@ -6,20 +6,26 @@
 
 using namespace std;
 
+class Cell;
+
 class Block {
 
-    vector<Cell *> cells;
+    vector<Cell*> cells;
     char name;
 
 public:
     Block();
 
-    void move(vector<Cell*> newLocation)();
-    bool validate(vector<Cell*> newLocation)();
+    vector<Cell*> getCells();
+
+    char getName();
+
+    void move(vector<Cell*> newLocation);
+    bool validate(vector<Cell*> newLocation);
 
     ~Block();
 
 };
 
 
-#endif BLOCK_H
+#endif
