@@ -2,15 +2,19 @@
 #define QUADRISBOARD_H
 
 #include <vector>
+#include <string>
+#include <iostream>
 #include "cell.h"
 #include "cinterpreter.h"
 #include "level.h"
+#include "constants.h"
+#include "block.h"
 
 using namespace std;
 
 class QuadrisBoard {
 
-    vector<vector<Cell *>> board;
+    vector<vector<Cell *>> board; //11x18
     vector<Block *> blocksOnBoard;
     int currentBlockIndex;
     //map<string, Command*> commandMap;
@@ -21,17 +25,31 @@ class QuadrisBoard {
 public:
     QuadrisBoard();
 
+    vector<vector<Cell *>> getBoard();
+    void setBoard(vector<vector<Cell *>> newBoard);
+    vector<Block *> getBlocksOnBoard();
+    void setBlocksOnBoard(vector<Block *> newBlocksOnBoard);
+    int getCurrentBlockIndex();
+    void setCurrentBlockIndex(int newCurrentBlockIndex);
+    vector<Level> getLevels();
+    void setLevels(vector<Level> newLevels);
+    int getCurrentLevel();
+    void setCurrentLevel(int newCurrentLevel);
+
     bool isLost();
-    void print();
+    void print(bool seeInvisible = true);
     void executeCommand(string name);
     bool isFullRow(int rowIndex);
     void clearRow(int rowIndex);
     void dropRowsAbove(int rowIndex);
-    bool isBlockStuck();
+    void dropTop(int rowIndex, int colIndex);
+    bool isBlockStuck(Block *);
+    bool deleteCellFromBlock(Block*, int, int);
+    bool cellBelowIsSticky(Block*, int, int);
     Interpreter *patternMatchName(string name);
 
     ~QuadrisBoard();
 
 };
 
-#endif QUADRISBOARD_H
+#endif
