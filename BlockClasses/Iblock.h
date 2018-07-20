@@ -1,4 +1,8 @@
-#ifndef IBLOCK_H
-#define IBLOCK_H
+//
+// Created by Dasha Burmistrova on 2018-07-18.
+//
 
-#endif
+#ifndef GITHUB_IBLOCK_H
+#define GITHUB_IBLOCK_H
+
+#endif //GITHUB_IBLOCK_H
