@@ -1,8 +1,21 @@
-//
-// Created by Madalinux on 2018-07-18.
-//
+#ifndef CELL_H
+#define CELL_H
 
-#ifndef QUADRISGAME_CELL_H
-#define QUADRISGAME_CELL_H
+#include "block.h"
 
-#endif //QUADRISGAME_CELL_H
+class Cell {
+
+    int xValue;
+    int yValue;
+    Block * block;
+
+public:
+    Cell();
+
+    char getBlockType();
+
+    ~Cell();
+
+};
+
+#endif

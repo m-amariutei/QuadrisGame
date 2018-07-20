@@ -7,4 +7,19 @@ find_package(X11 REQUIRED)
 link_libraries(${X11_LIBRARIES})
 include_directories(${X11_INCLUDE_DIR})
 
-add_executable(QuadrisGame main.cc block.h block.cc quadrisboard.h quadrisboard.cc level.cc level.h cell.h cell.cc window.h window.cc)
+add_executable(
+        QuadrisGame
+        main.cc
+        block.h block.cc
+        quadrisboard.h quadrisboard.cc
+        level.cc level.h
+        cell.h cell.cc
+        window.h window.cc
+        cinterpreter.cc cinterpreter.h
+        display.h display.cc
+        BlockClasses/Iblock.h BlockClasses/Iblock.cc
+        BlockClasses/Jblock.h BlockClasses/Jblock.cc
+        BlockClasses/Lblock.h BlockClasses/Lblock.cc
+        BlockClasses/Oblock.h BlockClasses/Oblock.cc
+        BlockClasses/Sblock.h BlockClasses/Sblock.cc
+        )
