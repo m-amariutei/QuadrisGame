@@ -2,6 +2,7 @@
 #define COMMAND_H
 
 #include <string>
+#include "quadrisboard.h"
 
 using namespace std;
 

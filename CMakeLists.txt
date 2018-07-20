@@ -22,4 +22,6 @@ add_executable(
         BlockClasses/Lblock.h BlockClasses/Lblock.cc
         BlockClasses/Oblock.h BlockClasses/Oblock.cc
         BlockClasses/Sblock.h BlockClasses/Sblock.cc
+        BlockClasses/Tblock.h BlockClasses/Tblock.cc
+        BlockClasses/Zblock.h BlockClasses/Zblock.cc
         )
