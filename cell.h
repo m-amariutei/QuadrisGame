@@ -3,6 +3,8 @@
 
 #include "block.h"
 
+class Block;
+
 class Cell {
 
     int xValue;

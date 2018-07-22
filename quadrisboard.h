@@ -5,10 +5,11 @@
 #include <string>
 #include <iostream>
 #include "cell.h"
-#include "cinterpreter.h"
+#include "interpreter.h"
 #include "level.h"
 #include "constants.h"
 #include "block.h"
+#include "display.h"
 
 using namespace std;
 
@@ -21,24 +22,29 @@ class QuadrisBoard {
     vector<Block *> blocksOnBoard;
     int currentBlockIndex;
     //map<string, Command*> commandMap;
-    Level* levels;
-    int currentLevel;
-    //Display display;
+    Level* level;
+    bool graphicDisplay;
+    Display display;
 
 public:
     QuadrisBoard();
 
     vector<vector<Cell *>> getBoard();
     void setBoard(vector<vector<Cell *>> newBoard);
+
     vector<Block *> getBlocksOnBoard();
     void setBlocksOnBoard(vector<Block *> newBlocksOnBoard);
+
     int getCurrentBlockIndex();
     void setCurrentBlockIndex(int newCurrentBlockIndex);
+
     Level* getLevels();
     void setLevels(Level* newLevels);
+
     int getCurrentLevel();
     void setCurrentLevel(int newCurrentLevel);
 
+    void initialize();
     bool isLost();
     void print(bool seeInvisible = true);
     void executeCommand(string name);

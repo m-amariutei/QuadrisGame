@@ -11,9 +11,14 @@ class QuadrisBoard;
 class Interpreter {
 
     string currentCommand;
+    bool graphicsDisplay;
+
 
 public:
-    Interpreter(std::istream &i, bool textOnly, int seed);
+    Interpreter();
+
+
+    void setGraphicsDisplay(bool graphics);
 
     void action(QuadrisBoard *board, Block *block);
     bool isPossible(QuadrisBoard *board, Block *block, string command);
