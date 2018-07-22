@@ -18,16 +18,22 @@ class Level;
 
 class QuadrisBoard {
 
+    // Singleton design pattern
+    static shared_ptr<QuadrisBoard> instance;
+    QuadrisBoard();
+
     vector<vector<Cell *>> board; //11x18
     vector<Block *> blocksOnBoard;
     int currentBlockIndex;
-    //map<string, Command*> commandMap;
     Level* level;
     bool graphicDisplay;
     Display display;
 
+
+
 public:
-    QuadrisBoard();
+
+    static shared_ptr<QuadrisBoard> getInstance();
 
     vector<vector<Cell *>> getBoard();
     void setBoard(vector<vector<Cell *>> newBoard);
@@ -41,8 +47,6 @@ public:
     Level* getLevels();
     void setLevels(Level* newLevels);
 
-    int getCurrentLevel();
-    void setCurrentLevel(int newCurrentLevel);
 
     void initialize();
     bool isLost();

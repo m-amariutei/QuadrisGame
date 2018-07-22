@@ -1,14 +1,8 @@
 #include <iostream>
+#include "constants.h"
 #include "level.h"
 
 using namespace std;
-
-// Level Probabilities
-#define LEVEL1 { 2, 2, 2, 2, 1, 2, 1 };
-#define LEVEL2 { 1, 1, 1, 1, 1, 1, 1 };
-#define LEVEL3 { 1, 1, 1, 1, 2, 1, 2 };
-// Block Identifiers
-#define BLOCKS { 'I', 'J', 'L', 'O', 'S', 'T', 'Z' };
 
 Level::Level(int level) : level{level} {
 

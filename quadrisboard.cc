@@ -1,10 +1,22 @@
 #include "quadrisboard.h"
 
+shared_ptr<QuadrisBoard> QuadrisBoard::instance = 0;
+
+shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
+
+	if (instance == 0) {
+		instance  = make_shared<QuadrisBoard>();
+	}
+	return instance;
+
+}
+
 QuadrisBoard::QuadrisBoard() {}
 
 void QuadrisBoard::initialize() {
 
 	/// Handle graphics here
+
 	if (graphicDisplay) {
 		//display = new GraphicDisplay();
 	} else {
@@ -78,6 +90,7 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 }
 
 bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
+
 	for (int j = 0; j < block->getCells().size(); j++) {
 		if (block->getCells().at(j)->getXValue() == x &&
 			block->getCells().at(j)->getYValue() == y) {
@@ -86,10 +99,12 @@ bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
 			return true;
 		}
 	}
+
 	return false;
 }
 
 void QuadrisBoard::clearRow(int rowIndex) {
+
 	if (rowIndex >= HEIGHT) cerr << "QuadrisBoard::clearRow: rowIndex >= HEIGHT" <<endl;
 	if (!isFullRow(rowIndex)) cerr << "uadrisboard.cc/clearRow: called on non-full row" <<endl;
 	for (int i = 0; i < WIDTH; i++) {
@@ -110,14 +125,11 @@ void QuadrisBoard::clearRow(int rowIndex) {
 void QuadrisBoard::dropRowsAbove(int rowIndex) {
 
 	if (rowIndex >= HEIGHT) {
-
 		cerr << "QuadrisBoard::dropRowsAbove: rowIndex >= HEIGHT" <<endl;
 	}
 
 	for (int i = rowIndex; i<LOST_ROW; i--) {
-
 		for (int j=0; j<WIDTH; j++) {
-
 			dropTop(rowIndex, j);
 		}
 	}
@@ -126,12 +138,10 @@ void QuadrisBoard::dropRowsAbove(int rowIndex) {
 void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 
 	if (rowIndex >= HEIGHT || rowIndex < LOST_ROW) {
-
 		cerr << "QuadrisBoard::dropTop: rowIndex is wrong" <<endl;
 	}
 
 	if (colIndex >= WIDTH || colIndex < 0) {
-
 		cerr << "QuadrisBoard::dropTop: colIndex is wrong" <<endl;
 	}
 
@@ -199,11 +209,6 @@ void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) { currentBlock
 Level* QuadrisBoard::getLevels() { return level; }
 
 void QuadrisBoard::setLevels(Level* newLevels) { level = newLevels; }
-
-
-int QuadrisBoard::getCurrentLevel() { return currentLevel; }
-
-void QuadrisBoard::setCurrentLevel(int newCurrentLevel) { currentLevel = newCurrentLevel; }
 
 //--------------------------------------------------------------------------------
 
