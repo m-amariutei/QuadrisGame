@@ -14,18 +14,19 @@ void QuadrisBoard::initialize() {
 
 	for (int i = 0; i < HEIGHT; i++) {
 
-		vector<Cell*> row;
+		vector<shared_ptr<Cell>> row;
 		board.push_back(row);
 
 		for (int j = 0; j < WIDTH; j++) {
 
-			Cell* cell = new Cell;	//need manual destroy
+			//Cell* cell = new Cell; need manual destroy ....not anymore
+			auto cell = make_shared<Cell>();
 			board.at(i).push_back(cell);
 		}
 	}
 
 	currentBlockIndex = -1;	//no blocks
-	level = new Level(0);
+	level = make_shared<Level>(0);
 
 }
 
@@ -50,7 +51,7 @@ void QuadrisBoard::print(bool seeInvisible) {
 
 		for(int j = 0; j < WIDTH; j++) {
 
-			Block* block = board.at(i).at(j)->getBlock();
+			auto block = board.at(i).at(j)->getBlock();
 
 			if(block != NULL) {
 				cout<< block->getType();
@@ -94,8 +95,8 @@ void QuadrisBoard::clearRow(int rowIndex) {
 	if (!isFullRow(rowIndex)) cerr << "uadrisboard.cc/clearRow: called on non-full row" <<endl;
 	for (int i = 0; i < WIDTH; i++) {
 		//let both cell and block know about this
-		Cell* cell = board.at(rowIndex).at(i);
-		Block* block = cell->getBlock();
+		shared_ptr<Cell> cell = board.at(rowIndex).at(i);
+		shared_ptr<Block> block = cell->getBlock();
 		if (block == NULL) cerr << "quadrisboard.cc/clearRow: block should not be NULL here" <<endl;
 
 		cell->setBlock(NULL);
@@ -136,10 +137,10 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	}
 
 	//take care of both cell and block class
-	Cell* cellDown = board.at(rowIndex).at(colIndex);
+	shared_ptr<Cell> cellDown = board.at(rowIndex).at(colIndex);
 
 	//Block* blockDown = cell->block;
-	Cell* cellTop = board.at(rowIndex - 1).at(colIndex);
+	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
 	Block* blockTop = cellTop->getBlock();
 
 	cellDown->setBlock(blockTop);
@@ -153,7 +154,7 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	blockTop->getCells().push_back(cellDown);
 }
 
-bool QuadrisBoard::isBlockStuck(Block* block) {
+bool QuadrisBoard::isBlockStuck(shared_ptr<Block> block) {
 
 	//return true iff below any cell occupied by this block, there is a cell occupied by another block or board ends
 	for (int i = 0; i<block->getCells().size(); i++) {
@@ -162,13 +163,13 @@ bool QuadrisBoard::isBlockStuck(Block* block) {
 	return false;
 }
 
-bool QuadrisBoard::cellBelowIsSticky(Block* block, int x, int y) {
+bool QuadrisBoard::cellBelowIsSticky(shared_ptr<Block> block, int x, int y) {
 
 	//Y is ROW and X is col
 	if (y == HEIGHT - 1) return true;	//end of board reached
 
 	else {
-		Cell* cellBelow = board.at(y).at(x);
+		shared_ptr<Cell> cellBelow = board.at(y).at(x);
 		if (cellBelow->getBlock() != block) return true;
 		else return false;
 	}
@@ -181,29 +182,25 @@ Interpreter * QuadrisBoard::patternMatchName(string name) {
 
 //Getters and Setters -------------------------------------------------------------
 
-vector<vector<Cell *>> QuadrisBoard::getBoard() { return board; }
+vector<vector<shared_ptr<Cell>>> QuadrisBoard::getBoard() { return board; }
 
-void QuadrisBoard::setBoard(vector<vector<Cell *>> newBoard) { board = newBoard; }
-
-
-vector<Block *> QuadrisBoard::getBlocksOnBoard() { return blocksOnBoard; }
-
-void QuadrisBoard::setBlocksOnBoard(vector<Block *> newBlocksOnBoard) { blocksOnBoard = newBlocksOnBoard; }
+void QuadrisBoard::setBoard(vector<vector<shared_ptr<Cell>>> newBoard) { board = newBoard; }
 
 
+vector<shared_ptr<Block>> QuadrisBoard::getBlocksOnBoard() { return blocksOnBoard; }
+
+void QuadrisBoard::setBlocksOnBoard(vector<shared_ptr<Block>> newBlocksOnBoard) { blocksOnBoard = newBlocksOnBoard; }
+
+/*
 int QuadrisBoard::getCurrentBlockIndex() { return currentBlockIndex; }
 
 void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) { currentBlockIndex = newCurrentBlockIndex; }
-
+*/
 
 Level* QuadrisBoard::getLevels() { return level; }
 
-void QuadrisBoard::setLevels(Level* newLevels) { level = newLevels; }
+void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
 
-
-int QuadrisBoard::getCurrentLevel() { return currentLevel; }
-
-void QuadrisBoard::setCurrentLevel(int newCurrentLevel) { currentLevel = newCurrentLevel; }
 
 //--------------------------------------------------------------------------------
 

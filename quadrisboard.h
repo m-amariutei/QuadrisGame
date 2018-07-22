@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
 #include "cell.h"
 #include "interpreter.h"
 #include "level.h"
@@ -18,28 +19,24 @@ class Level;
 
 class QuadrisBoard {
 
-    vector<vector<Cell *>> board; //11x18
-    vector<Block *> blocksOnBoard;
+    vector<vector<shared_ptr<Cell>>> board; //11x18
+    vector<shared_ptr<Block>> blocksOnBoard;
     int currentBlockIndex;
-    //map<string, Command*> commandMap;
-    Level* level;
+    shared_ptr<Level> level;
     bool graphicDisplay;
     Display display;
 
 public:
     QuadrisBoard();
 
-    vector<vector<Cell *>> getBoard();
-    void setBoard(vector<vector<Cell *>> newBoard);
+    vector<vector<shared_ptr<Cell>>> getBoard();
+    void setBoard(vector<vector<shared_ptr<Cell>>> newBoard);
 
-    vector<Block *> getBlocksOnBoard();
-    void setBlocksOnBoard(vector<Block *> newBlocksOnBoard);
-
-    int getCurrentBlockIndex();
-    void setCurrentBlockIndex(int newCurrentBlockIndex);
+    vector<shared_ptr<Block>> getBlocksOnBoard();
+    void setBlocksOnBoard(vector<shared_ptr<Block>> newBlocksOnBoard);
 
     Level* getLevels();
-    void setLevels(Level* newLevels);
+    void setLevels(shared_ptr<Level> newLevels);
 
     int getCurrentLevel();
     void setCurrentLevel(int newCurrentLevel);
@@ -52,10 +49,10 @@ public:
     void clearRow(int rowIndex);
     void dropRowsAbove(int rowIndex);
     void dropTop(int rowIndex, int colIndex);
-    bool isBlockStuck(Block *);
-    bool deleteCellFromBlock(Block*, int, int);
-    bool cellBelowIsSticky(Block*, int, int);
-    Interpreter *patternMatchName(string name);
+    bool isBlockStuck(shared_ptr<Block>);
+    bool deleteCellFromBlock(shared_ptr<Block>, int, int);
+    bool cellBelowIsSticky(shared_ptr<Block>, int, int);
+    Interpreter *patternMatchName(string name); //......add shared ptr
 
     ~QuadrisBoard();
 
