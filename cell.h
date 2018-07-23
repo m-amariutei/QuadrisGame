@@ -10,13 +10,13 @@ class Cell {
 
     int xValue;
     int yValue;
-    shared_ptr<Block> block;
+    std::shared_ptr<Block> block;
 
 public:
-    Cell(int xValue, int yValue, shared_ptr<Block> block);
+    Cell(int xValue, int yValue, std::shared_ptr<Block> block);
 
-    shared_ptr<Block> getBlock();
-    void setBlock(shared_ptr<Block> block);
+    std::shared_ptr<Block> getBlock();
+    void setBlock(std::shared_ptr<Block> block);
 
     int getXValue();
     void setXValue(int newX);

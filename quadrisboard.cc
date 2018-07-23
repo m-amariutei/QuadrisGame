@@ -32,7 +32,7 @@ void QuadrisBoard::initialize() {
 		for (int j = 0; j < WIDTH; j++) {
 
 			//Cell* cell = new Cell; need manual destroy ....not anymore
-			auto cell = make_shared<Cell>();
+			shared_ptr<Cell> cell = make_shared<Cell>(j,i, nullptr);
 			board.at(i).push_back(cell);
 		}
 	}
@@ -92,11 +92,9 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 
 bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
 
-	for (int j = 0; j < block->getCells().size(); j++) {
-		if (block->getCells().at(j)->getXValue() == x &&
-			block->getCells().at(j)->getYValue() == y) {
-			vector<Cell*>::iterator itt = block->getCells().begin() + j;
-			block->getCells().erase(itt);
+	for (vector<shared_ptr<Cell>>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
+		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
+			block->getCells().erase(it);
 			return true;
 		}
 	}

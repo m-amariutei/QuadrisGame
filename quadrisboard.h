@@ -41,7 +41,7 @@ public:
     vector<shared_ptr<Block>> getBlocksOnBoard();
     void setBlocksOnBoard(vector<shared_ptr<Block>> newBlocksOnBoard);
 
-    Level* getLevels();
+    std::shared_ptr<Level> getLevels();
     void setLevels(shared_ptr<Level> newLevels);
 
 
