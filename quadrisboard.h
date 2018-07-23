@@ -59,6 +59,8 @@ public:
     bool cellBelowIsSticky(shared_ptr<Block>, int, int);
     Interpreter *patternMatchName(string name); //......add shared ptr
 
+    string replaceBlock(string blockType);
+
     ~QuadrisBoard();
 
 };

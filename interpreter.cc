@@ -20,7 +20,7 @@ void Interpreter::startGame() {
     while (cin >> nextCommand) {
 
         if(nextCommand.length() <= 1 && isBlockName(nextCommand)) {
-            board->getCurrentBlock()->replaceBlock(nextCommand);
+            board->replaceBlock(nextCommand);
         }
 
         else {
