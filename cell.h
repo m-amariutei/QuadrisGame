@@ -1,6 +1,7 @@
 #ifndef CELL_H
 #define CELL_H
 
+#include <memory>
 #include "block.h"
 
 class Block;
@@ -9,20 +10,19 @@ class Cell {
 
     int xValue;
     int yValue;
-    Block * block;
+    shared_ptr<Block> block;
 
 public:
-    Cell();
+    Cell(int xValue, int yValue, shared_ptr<Block> block);
 
-    Block * getBlock();
-    void setBlock(Block *block);
+    shared_ptr<Block> getBlock();
+    void setBlock(shared_ptr<Block> block);
 
     int getXValue();
     int getYValue();
 
     char getBlockType();
 
-    ~Cell();
 
 };
 
