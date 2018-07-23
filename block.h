@@ -6,24 +6,33 @@
 
 using namespace std;
 
+enum BlockType {
+    Iblock, Jblock, Lblock, Oblock, Sblock, Tblock, Zblock
+};
+
 class Cell;
 
 class Block {
 
-    vector<Cell*> cells;
+    vector<shared_ptr<Cell>> cells;
     char type;
 
 public:
-    Block();
+    Block(vector<shared_ptr<Cell>> cells, char type);
 
-    vector<Cell*> getCells();
+    vector<shared_ptr<Cell>> getCells();
+    void setCells(vector<shared_ptr<Cell>> newCells);
 
     char getType();
+    void setType(char newType);
 
-    void move(vector<Cell*> newLocation);
-    bool validate(vector<Cell*> newLocation);
+    void right();
+    void left();
+    void down();
+    virtual void clockwise() = 0;
+    virtual void counter() = 0;
 
-    ~Block();
+    //virtual shared_ptr<Block> create(BlockType bType) = 0;
 
 };
 
