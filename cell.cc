@@ -22,12 +22,18 @@ int Cell::getXValue() {
     return xValue;
 }
 
+void Cell::setXValue(int newX) {
+
+    xValue = newX;
+}
+
 int Cell::getYValue() {
 
     return  yValue;
 }
 
-char Cell::getBlockType() {
+void Cell::setYValue(int newY) {
 
-    return block->getType();
+    yValue = newY;
 }
+

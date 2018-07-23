@@ -19,9 +19,10 @@ public:
     void setBlock(shared_ptr<Block> block);
 
     int getXValue();
-    int getYValue();
+    void setXValue(int newX);
 
-    char getBlockType();
+    int getYValue();
+    void setYValue(int newY);
 
 
 };
