@@ -90,7 +90,7 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 	return true;
 }
 
-bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
+bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
 
 	for (int j = 0; j < block->getCells().size(); j++) {
 		if (block->getCells().at(j)->getXValue() == x &&
@@ -151,7 +151,7 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 
 	//Block* blockDown = cell->block;
 	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
-	Block* blockTop = cellTop->getBlock();
+	shared_ptr<Block> blockTop = cellTop->getBlock();
 
 	cellDown->setBlock(blockTop);
 	cellTop->setBlock(NULL);
@@ -207,20 +207,7 @@ int QuadrisBoard::getCurrentBlockIndex() { return currentBlockIndex; }
 void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) { currentBlockIndex = newCurrentBlockIndex; }
 */
 
-Level* QuadrisBoard::getLevels() { return level; }
+shared_ptr<Level> QuadrisBoard::getLevels() { return level; }
 
 void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
 
-
-//--------------------------------------------------------------------------------
-
-QuadrisBoard::~QuadrisBoard() {
-
-	for (int i = 0; i < HEIGHT; i++) {
-
-		for (int j = 0; j < WIDTH; j++) {
-
-			delete board.at(i).at(j);	//deleting cells
-		}
-	}
-}
