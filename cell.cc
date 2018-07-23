@@ -1,13 +1,18 @@
 #include "cell.h"
 
-Cell::Cell() {} /// TO DO
+int xValue;
+int yValue;
+shared_ptr<Block> block;
 
-Block * Cell::getBlock() {
+Cell::Cell(int xValue, int yValue, shared_ptr<Block> block):
+        xValue{xValue}, yValue{yValue}, block{block} {}
+
+shared_ptr<Block> Cell::getBlock() {
 
     return block;
 }
 
-void Cell::setBlock(Block *newBlock) {
+void Cell::setBlock(shared_ptr<Block> newBlock) {
 
     block = newBlock;
 }
@@ -26,5 +31,3 @@ char Cell::getBlockType() {
 
     return block->getType();
 }
-
-Cell::~Cell() {}
