@@ -1,10 +1,10 @@
 #include "quadrisboard.h"
 
-shared_ptr<QuadrisBoard> QuadrisBoard::instance = 0;
+QuadrisBoard* QuadrisBoard::instance = 0;
 
-shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
+QuadrisBoard* QuadrisBoard::getInstance() {
 	if (instance == 0) {
-		static shared_ptr<QuadrisBoard> newInstance(new QuadrisBoard);
+		static QuadrisBoard* newInstance(new QuadrisBoard);
 		instance = newInstance;
 	}
 	return instance;
@@ -26,19 +26,19 @@ void QuadrisBoard::initialize() {
 
 	for (int i = 0; i < HEIGHT; i++) {
 
-		vector<shared_ptr<Cell>> row;
+		vector<Cell*> row;
 		board.push_back(row);
 
 		for (int j = 0; j < WIDTH; j++) {
 
 			//Cell* cell = new Cell; need manual destroy ....not anymore
-			auto cell = make_shared<Cell>();
+			auto cell = make_shared<Cell>(0, 0, BlockType::Single); // fix
 			board.at(i).push_back(cell);
 		}
 	}
 
 	currentBlockIndex = -1;	//no blocks
-	level = make_shared<Level>(0);
+	level = make_shared<Level>(0); //fix
 
 }
 
@@ -90,7 +90,7 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 	return true;
 }
 
-bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
+bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
 
 	for (int j = 0; j < block->getCells().size(); j++) {
 		if (block->getCells().at(j)->getXValue() == x &&
@@ -110,8 +110,8 @@ void QuadrisBoard::clearRow(int rowIndex) {
 	if (!isFullRow(rowIndex)) cerr << "uadrisboard.cc/clearRow: called on non-full row" <<endl;
 	for (int i = 0; i < WIDTH; i++) {
 		//let both cell and block know about this
-		shared_ptr<Cell> cell = board.at(rowIndex).at(i);
-		shared_ptr<Block> block = cell->getBlock();
+		Cell* cell = board.at(rowIndex).at(i);
+		Block* block = cell->getBlock();
 		if (block == NULL) cerr << "quadrisboard.cc/clearRow: block should not be NULL here" <<endl;
 
 		cell->setBlock(NULL);
@@ -147,11 +147,11 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	}
 
 	//take care of both cell and block class
-	shared_ptr<Cell> cellDown = board.at(rowIndex).at(colIndex);
+	Cell* cellDown = board.at(rowIndex).at(colIndex);
 
 	//Block* blockDown = cell->block;
-	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
-	shared_ptr<Block> blockTop = cellTop->getBlock();
+	Cell* cellTop = board.at(rowIndex - 1).at(colIndex);
+	Block* blockTop = cellTop->getBlock();
 
 	cellDown->setBlock(blockTop);
 	cellTop->setBlock(NULL);
@@ -164,7 +164,7 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	blockTop->getCells().push_back(cellDown);
 }
 
-bool QuadrisBoard::isBlockStuck(shared_ptr<Block> block) {
+bool QuadrisBoard::isBlockStuck(Block* block) {
 
 	//return true iff below any cell occupied by this block, there is a cell occupied by another block or board ends
 	for (int i = 0; i<block->getCells().size(); i++) {
@@ -173,13 +173,13 @@ bool QuadrisBoard::isBlockStuck(shared_ptr<Block> block) {
 	return false;
 }
 
-bool QuadrisBoard::cellBelowIsSticky(shared_ptr<Block> block, int x, int y) {
+bool QuadrisBoard::cellBelowIsSticky(Block* block, int x, int y) {
 
 	//Y is ROW and X is col
 	if (y == HEIGHT - 1) return true;	//end of board reached
 
 	else {
-		shared_ptr<Cell> cellBelow = board.at(y).at(x);
+		Cell* cellBelow = board.at(y).at(x);
 		if (cellBelow->getBlock() != block) return true;
 		else return false;
 	}
@@ -192,14 +192,14 @@ Interpreter * QuadrisBoard::patternMatchName(string name) {
 
 //Getters and Setters -------------------------------------------------------------
 
-vector<vector<shared_ptr<Cell>>> QuadrisBoard::getBoard() { return board; }
+vector<vector<Cell*>> QuadrisBoard::getBoard() { return board; }
 
-void QuadrisBoard::setBoard(vector<vector<shared_ptr<Cell>>> newBoard) { board = newBoard; }
+void QuadrisBoard::setBoard(vector<vector<Cell*>> newBoard) { board = newBoard; }
 
 
-vector<shared_ptr<Block>> QuadrisBoard::getBlocksOnBoard() { return blocksOnBoard; }
+vector<Block*> QuadrisBoard::getBlocksOnBoard() { return blocksOnBoard; }
 
-void QuadrisBoard::setBlocksOnBoard(vector<shared_ptr<Block>> newBlocksOnBoard) { blocksOnBoard = newBlocksOnBoard; }
+void QuadrisBoard::setBlocksOnBoard(vector<Block*> newBlocksOnBoard) { blocksOnBoard = newBlocksOnBoard; }
 
 /*
 int QuadrisBoard::getCurrentBlockIndex() { return currentBlockIndex; }
@@ -207,7 +207,7 @@ int QuadrisBoard::getCurrentBlockIndex() { return currentBlockIndex; }
 void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) { currentBlockIndex = newCurrentBlockIndex; }
 */
 
-shared_ptr<Level> QuadrisBoard::getLevels() { return level; }
+Level* QuadrisBoard::getLevels() { return level; }
 
-void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
+void QuadrisBoard::setLevels(Level* newLevels) { level = newLevels; }
 

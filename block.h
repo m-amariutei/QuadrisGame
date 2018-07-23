@@ -7,28 +7,28 @@
 using namespace std;
 
 enum BlockType {
-    Iblock, Jblock, Lblock, Oblock, Sblock, Tblock, Zblock
+    Iblock, Jblock, Lblock, Oblock, Sblock, Tblock, Zblock, Single
 };
 
 class Cell;
 
 class Block {
-
-    vector<shared_ptr<Cell>> cells;
+protected:
+    vector<Cell*> cells;
     char type;
 
 public:
-    Block(vector<shared_ptr<Cell>> cells, char type);
+    Block(vector<Cell*> cells, char type);
 
-    vector<shared_ptr<Cell>> getCells();
-    void setCells(vector<shared_ptr<Cell>> newCells);
+    vector<Cell*> getCells();
+    void setCells(vector<Cell*> newCells);
 
     char getType();
     void setType(char newType);
 
     void right();
     void left();
-    void down();
+    void drop();
     virtual void clockwise() = 0;
     virtual void counter() = 0;
 

@@ -10,13 +10,15 @@ class Cell {
 
     int xValue;
     int yValue;
-    shared_ptr<Block> block;
+    Block* block;
 
 public:
-    Cell(int xValue, int yValue, shared_ptr<Block> block);
+    Cell();
 
-    shared_ptr<Block> getBlock();
-    void setBlock(shared_ptr<Block> block);
+    Cell(int xValue, int yValue, Block* block);
+
+    Block* getBlock();
+    void setBlock(Block* block);
 
     int getXValue();
     void setXValue(int newX);
