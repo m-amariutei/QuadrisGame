@@ -209,3 +209,6 @@ shared_ptr<Level> QuadrisBoard::getLevels() { return level; }
 
 void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
 
+shared_ptr<Block> QuadrisBoard::getCurrentBlock() {
+	return blocksOnBoard.at(currentBlockIndex);
+}

@@ -44,6 +44,7 @@ public:
     std::shared_ptr<Level> getLevels();
     void setLevels(shared_ptr<Level> newLevels);
 
+    shared_ptr<Block> getCurrentBlock();
 
     void initialize();
     bool isLost();

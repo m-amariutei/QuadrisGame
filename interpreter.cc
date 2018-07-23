@@ -1,5 +1,9 @@
 #include "interpreter.h"
 
+bool isBlockName(string command) {
+    if (command == "I" || command == "J" || command == "L" || command == "O" || command == "S" || command == "T" || command == "Z") return true;
+    return false;
+}
 
 /// Change graphics display to be true by default after implementation ///
 
@@ -15,8 +19,8 @@ void Interpreter::startGame() {
 
     while (cin >> nextCommand) {
 
-        if(nextCommand.length() <= 1) {
-            // Is it a block name?
+        if(nextCommand.length() <= 1 && isBlockName(nextCommand)) {
+            board->getCurrentBlock()->replaceBlock(nextCommand);
         }
 
         else {
@@ -69,28 +73,28 @@ string Interpreter::interpretCommand(string nextCommand) {
 void Interpreter::executeCommand(string nextCommand) {
 
     if (nextCommand == "left") {
-
+        board->getCurrentBlock()->left();
     } else if (nextCommand == "right") {
-
+        board->getCurrentBlock()->right();
     } else if (nextCommand == "down") {
-
+        board->getCurrentBlock()->down();
     } else if (nextCommand == "clockwise") {
-
-    } else if (nextCommand == "counterclockwise") {
-
+        board->getCurrentBlock()->clockwise();
+    } else if (nextCommand == "counterclockwise") { //counter
+        board->getCurrentBlock()->counter();
     } else if (nextCommand == "drop") {
-
+        board->getCurrentBlock()->drop();
     } else if (nextCommand == "levelup") {
-
+        board->levelUp();
     } else if (nextCommand == "leveldown") {
-
+        board->levelDown();
     } else if (nextCommand == "restart") {
-
+        board->restart();
     } else if (nextCommand == "hint") {
-
+        board->hint();
     } else {
-
         // world explosion???????
+        cerr << "Interpreter::executeCommand: command not found" <<endl;
     }
 }
 
@@ -128,13 +132,8 @@ void Interpreter::setStartLevel(int level) {
 }
 
 
-void Interpreter::action(QuadrisBoard *board, Block *block) {
-
-}
-
-bool Interpreter::isPossible(QuadrisBoard *board, Block *block, string command) {
-    //TODO
-    return false;
+bool Interpreter::isPossible(string command) {  //do we need this?
+    return board->isPossible(command);
 }
 
 void Interpreter::renameCommand() {
@@ -143,7 +142,6 @@ void Interpreter::renameCommand() {
 
 
 Interpreter::~Interpreter() {
-
 
 }
 

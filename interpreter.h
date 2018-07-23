@@ -37,7 +37,6 @@ public:
     int getStartLevel();
     void setStartLevel(int level);
 
-    void action(QuadrisBoard *board, Block *block);
     bool isPossible(QuadrisBoard *board, Block *block, string command);
     void renameCommand();
 
