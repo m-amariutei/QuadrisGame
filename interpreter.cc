@@ -133,7 +133,7 @@ void Interpreter::action(QuadrisBoard *board, Block *block) {
 }
 
 bool Interpreter::isPossible(QuadrisBoard *board, Block *block, string command) {
-
+    //TODO
 }
 
 void Interpreter::renameCommand() {

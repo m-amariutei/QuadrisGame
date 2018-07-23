@@ -27,7 +27,7 @@ class QuadrisBoard {
     int currentBlockIndex;
     Level* level;
     bool graphicDisplay;
-    Display display;
+    //Display display;
 
 
 

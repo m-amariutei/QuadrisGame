@@ -28,7 +28,7 @@ public:
     bool getGraphicsDisplay();
     void setGraphicsDisplay(bool graphics);
 
-    string getScriptFile;
+    string getScriptFile();
     void setScriptFile(string file);
 
     int getSeed();

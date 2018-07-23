@@ -3,9 +3,9 @@
 shared_ptr<QuadrisBoard> QuadrisBoard::instance = 0;
 
 shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
-
 	if (instance == 0) {
-		instance  = make_shared<QuadrisBoard>();
+		static shared_ptr<QuadrisBoard> newInstance(new QuadrisBoard);
+		instance = newInstance;
 	}
 	return instance;
 
@@ -20,7 +20,7 @@ void QuadrisBoard::initialize() {
 	if (graphicDisplay) {
 		//display = new GraphicDisplay();
 	} else {
-		display = NULL;
+		//display = NULL;
 	}
 
 
