@@ -1,6 +1,8 @@
 #include "block.h"
 #include <vector>
 
+Block::Block() {}
+
 Block::Block(vector<Cell*> cells, char type): cells{cells}, type{type} {}
 
 vector<Cell*> Block::getCells() { return cells; }

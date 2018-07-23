@@ -4,14 +4,13 @@
 
 #include "Iblock.h"
 
-class Cell;
 
-Iblock::Iblock();
+Iblock::Iblock(vector<Cell*> cells, char type) {}
 
 void Iblock::clockwise() {
 
 }
 
 void Iblock::counter() {
-    move();
+
 }

@@ -44,6 +44,7 @@ public:
     Level* getLevels();
     void setLevels(Level* newLevels);
 
+    Block* getCurrentBlock();
 
     void initialize();
     bool isLost();
@@ -57,6 +58,8 @@ public:
     bool deleteCellFromBlock(Block*, int, int);
     bool cellBelowIsSticky(Block*, int, int);
     Interpreter *patternMatchName(string name); //......add shared ptr
+
+    string replaceBlock(string blockType);
 
     ~QuadrisBoard();
 

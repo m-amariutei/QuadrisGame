@@ -26,7 +26,6 @@ public:
     int getYValue();
     void setYValue(int newY);
 
-
 };
 
 #endif

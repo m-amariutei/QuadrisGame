@@ -10,8 +10,7 @@
 
 class Iblock: public Block {
 public:
-    Iblock();
-
+    void Iblock(vector<Cell*> cells, char type);
     void clockwise() override;
 
     void counter() override;

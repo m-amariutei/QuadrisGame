@@ -18,6 +18,7 @@ protected:
     char type;
 
 public:
+    Block();
     Block(vector<Cell*> cells, char type);
 
     vector<Cell*> getCells();

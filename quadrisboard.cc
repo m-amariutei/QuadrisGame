@@ -32,13 +32,16 @@ void QuadrisBoard::initialize() {
 		for (int j = 0; j < WIDTH; j++) {
 
 			//Cell* cell = new Cell; need manual destroy ....not anymore
-			auto cell = make_shared<Cell>(0, 0, BlockType::Single); // fix
+
+			//shared_ptr<Cell> cell = make_shared<Cell>(j,i, nullptr);
+			Cell* cell = new Cell(j, i, nullptr);
 			board.at(i).push_back(cell);
 		}
 	}
 
 	currentBlockIndex = -1;	//no blocks
-	level = make_shared<Level>(0); //fix
+	level = new Level(0);
+	//level = make_shared<Level>(0); //fix
 
 }
 
@@ -92,11 +95,9 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 
 bool QuadrisBoard::deleteCellFromBlock(Block* block, int x, int y) {
 
-	for (int j = 0; j < block->getCells().size(); j++) {
-		if (block->getCells().at(j)->getXValue() == x &&
-			block->getCells().at(j)->getYValue() == y) {
-			vector<Cell*>::iterator itt = block->getCells().begin() + j;
-			block->getCells().erase(itt);
+	for (vector<Cell*>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
+		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
+			block->getCells().erase(it);
 			return true;
 		}
 	}
@@ -211,3 +212,6 @@ Level* QuadrisBoard::getLevels() { return level; }
 
 void QuadrisBoard::setLevels(Level* newLevels) { level = newLevels; }
 
+Block* QuadrisBoard::getCurrentBlock() {
+	return blocksOnBoard.at(currentBlockIndex);
+}
