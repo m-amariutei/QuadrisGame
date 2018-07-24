@@ -14,17 +14,17 @@
 
 using namespace std;
 
-class Interpreter;
 class Level;
+class Block;
+class Cell;
 
 class QuadrisBoard {
     // Singleton design pattern
-    static QuadrisBoard* instance;
+    static shared_ptr<QuadrisBoard>instance;
     QuadrisBoard();
-    vector<vector<Cell*>> board; //11x18
-    vector<Block*> blocksOnBoard;
-    int currentBlockIndex;
-    Level* level;
+    vector<vector<shared_ptr<Cell>>> board; //11x18
+    shared_ptr<Block> currentBlock;
+    shared_ptr<Level> level;
 
     bool graphicDisplay;
     //Display display;
@@ -33,18 +33,15 @@ class QuadrisBoard {
 
 public:
 
-    static QuadrisBoard* getInstance();
+    static shared_ptr<QuadrisBoard> getInstance();
 
-    vector<vector<Cell*>> getBoard();
-    void setBoard(vector<vector<Cell*>> newBoard);
+    vector<vector<shared_ptr<Cell>>> getBoard();
+    void setBoard(vector<vector<shared_ptr<Cell>>> newBoard);
 
-    vector<Block*> getBlocksOnBoard();
-    void setBlocksOnBoard(vector<Block*> newBlocksOnBoard);
+    shared_ptr<Level> getLevel();
+    void setLevels(shared_ptr<Level> newLevels);
 
-    Level* getLevels();
-    void setLevels(Level* newLevels);
-
-    Block* getCurrentBlock();
+    shared_ptr<Block> getCurrentBlock();
 
     void initialize();
     bool isLost();
@@ -54,15 +51,19 @@ public:
     void clearRow(int rowIndex);
     void dropRowsAbove(int rowIndex);
     void dropTop(int rowIndex, int colIndex);
-    bool isBlockStuck(Block*);
-    bool deleteCellFromBlock(Block*, int, int);
-    bool cellBelowIsSticky(Block*, int, int);
-    Interpreter *patternMatchName(string name); //......add shared ptr
+    bool isBlockStuck(shared_ptr<Block>);
+    bool deleteCellFromBlock(shared_ptr<Block>, int, int);
+    bool cellBelowIsSticky(shared_ptr<Block>, int, int);
+    //Interpreter *patternMatchName(string name); //......add shared ptr
 
-    string replaceBlock(string blockType);
+    void replaceBlock(string blockType);
 
-    ~QuadrisBoard();
-
+    //~QuadrisBoard();
+    void levelUp();
+    void levelDown();
+    void restart();
+    void hint();
+    bool isPossible(string command);
 };
 
 #endif

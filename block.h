@@ -2,6 +2,8 @@
 #define BLOCK_H
 
 #include <vector>
+#include <iostream>
+#include <memory>
 #include "cell.h"
 
 using namespace std;
@@ -14,15 +16,15 @@ class Cell;
 
 class Block {
 protected:
-    vector<Cell*> cells;
+    vector<shared_ptr<Cell>> cells;
     char type;
 
 public:
     Block();
-    Block(vector<Cell*> cells, char type);
+    Block(vector<shared_ptr<Cell>> cells, char type);
 
-    vector<Cell*> getCells();
-    void setCells(vector<Cell*> newCells);
+    vector<shared_ptr<Cell>> getCells();
+    void setCells(vector<shared_ptr<Cell>> newCells);
 
     char getType();
     void setType(char newType);
@@ -30,6 +32,7 @@ public:
     void right();
     void left();
     void drop();
+    void down();
     virtual void clockwise() = 0;
     virtual void counter() = 0;
 

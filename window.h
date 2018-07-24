@@ -5,6 +5,8 @@
 #include <X11/Xlib.h>
 #include <iostream>
 #include <string>
+#include <iostream>
+#include <memory>
 
 class Xwindow {
     Display *d;

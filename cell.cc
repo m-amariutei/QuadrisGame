@@ -4,15 +4,15 @@ int xValue;
 int yValue;
 shared_ptr<Block> block;
 
-Cell::Cell(int xValue, int yValue, Block* block):
+Cell::Cell(int xValue, int yValue, shared_ptr<Block> block):
         xValue{xValue}, yValue{yValue}, block{block} {}
 
-Block* Cell::getBlock() {
+shared_ptr<Block> Cell::getBlock() {
 
     return block;
 }
 
-void Cell::setBlock(Block* newBlock) {
+void Cell::setBlock(shared_ptr<Block> newBlock) {
 
     block = newBlock;
 }

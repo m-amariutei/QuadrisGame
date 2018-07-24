@@ -5,7 +5,7 @@
 #include "Iblock.h"
 
 
-Iblock::Iblock(vector<Cell*> cells, char type) {}
+Iblock::Iblock(vector<shared_ptr<Cell>> cells, char type) {}
 
 void Iblock::clockwise() {
 

@@ -1,11 +1,12 @@
-#ifndef COMMAND_H
-#define COMMAND_H
-
-#define BLOCKS { 'I', 'J', 'L', 'O', 'S', 'T', 'Z' };
+#ifndef INTERPRETER_H
+#define INTERPRETER_H
 
 #include <string>
+#include <iostream>
 #include <memory>
 #include "quadrisboard.h"
+#include "level.h"
+#include "constants.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class QuadrisBoard;
 class Interpreter {
 
 
-    QuadrisBoard* board;
+    shared_ptr<QuadrisBoard> board;
     string currentCommand;
     bool graphicsDisplay;
     string scriptFile;
@@ -37,7 +38,7 @@ public:
     int getStartLevel();
     void setStartLevel(int level);
 
-    bool isPossible(QuadrisBoard *board, Block *block, string command);
+    bool isPossible(string);
     void renameCommand();
 
     ~Interpreter();

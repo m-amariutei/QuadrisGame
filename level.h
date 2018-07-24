@@ -1,10 +1,14 @@
-
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <iostream>
+#include <memory>
 #include <string>
 #include <fstream>
-#include "quadrisboard.h"
+#include <vector>
+#include "constants.h"
+
+using namespace std;
 
 class Level {
 

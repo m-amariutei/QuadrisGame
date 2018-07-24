@@ -1,5 +1,4 @@
 #include <iostream>
-#include "constants.h"
 #include "level.h"
 
 using namespace std;
@@ -63,8 +62,25 @@ char Level::otherLevelBlock() {
     return blocks[0];
 }
 
+int Level::getLevel() {
+    return level;
+}
+
+void Level::setLevel(int newLevel) {
+    level = newLevel;
+}
+
+bool Level::getHeavy() {
+    return heavy;
+}
+
+void Level::setHeavy(bool newHeavy) {
+    heavy = newHeavy;
+}
+
 
 Level::~Level() {
 
     fileIn.close();
 }
+

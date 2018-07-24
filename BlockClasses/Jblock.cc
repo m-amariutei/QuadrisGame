@@ -6,7 +6,7 @@
 
 class Cell;
 
-Jblock::Jblock();
+Jblock::Jblock() {}
 
 void Jblock::clockwise() {
 
