@@ -4,18 +4,24 @@
 
 #include <iostream>
 #include <memory>
+#include "quadrisboard.h"
 
 using namespace std;
 
-class Display {
+class QuadrisBoard;
 
+class Display {
+	bool graphics;
+	shared_ptr<QuadrisBoard> quadrisboard;
 
 public:
-    Display();
+    Display(bool newGraphics, shared_ptr<QuadrisBoard> newBoard);
+    //~Display();
 
+    bool getGraphics();
+    void setGraphics(bool newGraphics);
 
-    ~Display();
-
+    void print(bool showHidden = true, char empty = ' ');
 };
 
 #endif

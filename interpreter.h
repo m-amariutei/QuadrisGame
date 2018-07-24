@@ -7,14 +7,16 @@
 #include "quadrisboard.h"
 #include "level.h"
 #include "constants.h"
+#include "display.h"
 
 using namespace std;
 
+class Display;
 class QuadrisBoard;
 
 class Interpreter {
 
-
+    shared_ptr<Display> display;
     shared_ptr<QuadrisBoard> board;
     string currentCommand;
     bool graphicsDisplay;

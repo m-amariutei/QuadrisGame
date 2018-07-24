@@ -25,9 +25,9 @@ public:
 
     // Getters and Setters
     int getLevel();
-    void setLevel(int level);
+    void setLevel(int newLevel);
     bool getHeavy();
-    void setHeavy(bool heavy);
+    void setHeavy(bool newHeavy);
 
     // Gets next block
     char getNextBlockType();

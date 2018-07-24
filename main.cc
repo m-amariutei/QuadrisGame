@@ -38,4 +38,6 @@ int main(int argc, char *argv[]) {
 
     gameInterpreter->startGame();
 
+    delete gameInterpreter;
+
 }

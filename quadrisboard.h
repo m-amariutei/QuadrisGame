@@ -10,7 +10,6 @@
 #include "level.h"
 #include "constants.h"
 #include "block.h"
-#include "display.h"
 
 using namespace std;
 
@@ -25,10 +24,6 @@ class QuadrisBoard {
     vector<vector<shared_ptr<Cell>>> board; //11x18
     shared_ptr<Block> currentBlock;
     shared_ptr<Level> level;
-
-    bool graphicDisplay;
-    //Display display;
-
 
 
 public:
@@ -45,7 +40,7 @@ public:
 
     void initialize();
     bool isLost();
-    void print(bool seeInvisible = true);
+    void print(bool seeInvisible = true, char empty = ' ');
     void executeCommand(string name);
     bool isFullRow(int rowIndex);
     void clearRow(int rowIndex);

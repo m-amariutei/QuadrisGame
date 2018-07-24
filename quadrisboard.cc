@@ -11,18 +11,11 @@ shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
 
 }
 
-QuadrisBoard::QuadrisBoard() {}
+QuadrisBoard::QuadrisBoard() {
+	initialize();
+}
 
 void QuadrisBoard::initialize() {
-
-	/// Handle graphics here
-
-	if (graphicDisplay) {
-		//display = new GraphicDisplay();
-	} else {
-		//display = NULL;
-	}
-
 
 	for (int i = 0; i < HEIGHT; i++) {
 
@@ -55,10 +48,10 @@ bool QuadrisBoard::isLost() {
 	return false;
 }
 
-void QuadrisBoard::print(bool seeInvisible) {
+void QuadrisBoard::print(bool seeInvisible, char empty) {
 
-	int begRow = 0;
-	if(seeInvisible) begRow = NUM_ROWS_INVISIBLE;
+	int begRow = NUM_ROWS_INVISIBLE;
+	if(seeInvisible) begRow = 0;
 
 	for (int i = begRow; i < HEIGHT; i++) {
 
@@ -69,7 +62,7 @@ void QuadrisBoard::print(bool seeInvisible) {
 			if(block != nullptr) {
 				cout<< block->getType();
 			} else {
-				cout<<' ';
+				cout<<empty;
 			}
 			
 		}

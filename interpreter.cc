@@ -7,15 +7,16 @@ bool isBlockName(string command) {
 
 /// Change graphics display to be true by default after implementation ///
 
-Interpreter::Interpreter() : graphicsDisplay{false}, seed{0},
+Interpreter::Interpreter() : graphicsDisplay{true}, seed{0},
                              scriptFile{"sequence.txt"}, startLevel{0} {
 
     board = QuadrisBoard::getInstance();
+    display = make_shared<Display>(true, board);
 }
 
 void Interpreter::startGame() {
-
     string nextCommand;
+    display->print(true, '-');   //TODO: display->print(false, ' ')
 
     while (cin >> nextCommand) {
 
@@ -35,6 +36,8 @@ void Interpreter::startGame() {
 
             executeCommand(fullCommand);
         }
+
+        display->print(true, '-');   //TODO: display->print(false, ' ')
     }
 }
 
@@ -105,6 +108,7 @@ bool Interpreter::getGraphicsDisplay() {
 
 void Interpreter::setGraphicsDisplay(bool graphics) {
     graphicsDisplay = graphics;
+    display->setGraphics(graphics);
 }
 
 string Interpreter::getScriptFile() {
