@@ -95,7 +95,6 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 }
 
 bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
-
 	for (vector<shared_ptr<Cell>>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
 		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
 			block->getCells().erase(it);
@@ -127,19 +126,18 @@ void QuadrisBoard::clearRow(int rowIndex) {
 
 void QuadrisBoard::dropRowsAbove(int rowIndex) {
 
-	if (rowIndex >= HEIGHT) {
-		cerr << "QuadrisBoard::dropRowsAbove: rowIndex >= HEIGHT" <<endl;
+	if (rowIndex >= HEIGHT || rowIndex <= 0) {
+		return;
 	}
 
-	for (int i = rowIndex; i<LOST_ROW; i--) {
+	for (int i = rowIndex; i>LOST_ROW; i--) {
 		for (int j=0; j<WIDTH; j++) {
-			dropTop(rowIndex, j);
+			dropTop(i, j);
 		}
 	}
 }
 
 void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
-
 	if (rowIndex >= HEIGHT || rowIndex < LOST_ROW) {
 		cerr << "QuadrisBoard::dropTop: rowIndex is wrong" <<endl;
 	}
@@ -155,15 +153,13 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
 	shared_ptr<Block> blockTop = cellTop->getBlock();
 
+	if(rowIndex >= 16 && blockTop != nullptr) cout<<blockTop->getType()<<endl;
+
 	cellDown->setBlock(blockTop);
 	cellTop->setBlock(nullptr);
-
 	//find Cell* in block that is above and replace it with a Cell* of the cell below
-	bool wasDeletedSuccessfully = deleteCellFromBlock(blockTop, cellTop->getXValue(), cellDown->getYValue());
-
-	if (!wasDeletedSuccessfully) cerr << "quadrisboard.cc/dropTop: deleteCellFromBlock failed" <<endl;
-
-	blockTop->getCells().push_back(cellDown);
+	if(blockTop != nullptr) blockTop->getCells().push_back(cellDown);
+	
 }
 
 bool QuadrisBoard::isBlockStuck() {
@@ -185,7 +181,7 @@ bool QuadrisBoard::cellBelowIsSticky(shared_ptr<Block> block, int x, int y) {
 	if (y == HEIGHT - 1) return true;	//end of board reached
 
 	else {
-		shared_ptr<Cell> cellBelow = board.at(y).at(x);
+		shared_ptr<Cell> cellBelow = board.at(y+1).at(x);
 		if (cellBelow->getBlock() != nullptr && cellBelow->getBlock() != block) return true;
 		else return false;
 	}
@@ -252,10 +248,9 @@ void QuadrisBoard::hint() {
     //TODO
 }
 
-bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {
-	cout<<"validateCoord"<<endl;
+bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
 	for(int i=0; i<coordToCheck.size(); i++) {
-		cout<<"("<<coordToCheck.at(i).first<<","<<coordToCheck.at(i).second<<")"<<endl;
+		//cout<<"("<<coordToCheck.at(i).first<<","<<coordToCheck.at(i).second<<")"<<endl;
 		if(coordToCheck.at(i).first < 0 || coordToCheck.at(i).first >= HEIGHT ||
 			coordToCheck.at(i).second < 0 || coordToCheck.at(i).second >= WIDTH ||
 			(board.at(coordToCheck.at(i).first).at(coordToCheck.at(i).second)->getBlock() != nullptr) &&

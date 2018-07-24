@@ -22,8 +22,9 @@ void Interpreter::startGame() {
     display->print(true, '-');   //TODO: display->print(false, ' ')
 
     while (cin >> nextCommand) {
-
+        cout<<"Got command"<<endl;
         if(nextCommand.length() <= 1 && isBlockName(nextCommand)) {
+            cout<<"Trying to replace block"<<endl;
             board->replaceBlock(nextCommand);
         }
 
@@ -37,16 +38,19 @@ void Interpreter::startGame() {
                 continue;
             }
 
+            cout<<"Trying to execute command: "<<fullCommand<<endl;
             executeCommand(fullCommand);
             if(board->isBlockStuck()) {
                 cout<<"Block is stuck"<<endl;
                 if(board->isLost()) {
                     cout << "Game Over" <<endl;
+                    display->print(true, '-');   //TODO: display->print(false, ' ')
                     return;
                 }
 
                 for(int i=0; i<HEIGHT; i++) {
                     if(board->isFullRow(i)) {
+                        cout<<"Row "<<i<<" is full"<<endl;
                         board->clearRow(i);
                     }
                 }
