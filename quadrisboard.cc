@@ -228,7 +228,7 @@ void QuadrisBoard::levelDown() {
 
 void QuadrisBoard::restart() {
     //wipe cells content
-    for(int i; i<HEIGHT; i++) {
+    for(int i=0; i<HEIGHT; i++) {
         for(int j=0; j<WIDTH; j++) {
             shared_ptr<Cell> cell = board.at(i).at(j);
             shared_ptr<Block> block = cell->getBlock();
@@ -263,6 +263,7 @@ bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
 
 void QuadrisBoard::replaceBlock(string blockType) {
 	//TODO
+
 }
 
 void QuadrisBoard::getNextBlock() {

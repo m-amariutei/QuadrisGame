@@ -46,7 +46,7 @@ public:
 
 protected:
     string interpretCommand(string nextCommand);
-    void executeCommand(string nextCommand);
+    bool executeCommand(string nextCommand);
 
 };
 

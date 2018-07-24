@@ -6,6 +6,8 @@ using namespace std;
 Level::Level(int level) : level{level} {
 
     fileIn.open(inputFile.c_str());
+    if(level >= 3) heavy = true;
+    else heavy = false;
 }
 
 char Level::getNextBlockType() {
@@ -68,6 +70,8 @@ int Level::getLevel() {
 
 void Level::setLevel(int newLevel) {
     level = newLevel;
+    if(level >=3) heavy = true;
+    else heavy = false;
 }
 
 bool Level::getHeavy() {

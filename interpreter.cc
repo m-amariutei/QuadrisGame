@@ -1,5 +1,10 @@
 #include "interpreter.h"
 
+bool isMove(string s) {
+    if(s == "left" || s == "right" || s == "down" || s == "clockwise" || s == "counterclockwise" || s == "drop") return true;
+    else return false;
+}
+
 bool isBlockName(string command) {
     if (command == "I" || command == "J" || command == "L" || command == "O" || command == "S" || command == "T" || command == "Z") return true;
     return false;
@@ -26,6 +31,7 @@ void Interpreter::startGame() {
         if(nextCommand.length() <= 1 && isBlockName(nextCommand)) {
             cout<<"Trying to replace block"<<endl;
             board->replaceBlock(nextCommand);
+            //don't drop
         }
 
         else {
@@ -39,7 +45,13 @@ void Interpreter::startGame() {
             }
 
             cout<<"Trying to execute command: "<<fullCommand<<endl;
-            executeCommand(fullCommand);
+            bool successMove = executeCommand(fullCommand);
+            if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
+                executeCommand("down");
+            }
+
+            if(!board->getCurrentBlock()) board->getNextBlock();
+
             if(board->isBlockStuck()) {
                 cout<<"Block is stuck"<<endl;
                 if(board->isLost()) {
@@ -94,18 +106,18 @@ string Interpreter::interpretCommand(string nextCommand) {
 
 }
 
-void Interpreter::executeCommand(string nextCommand) {
-
+bool Interpreter::executeCommand(string nextCommand) {
+    bool successMove = true;
     if (nextCommand == "left") {
-        board->getCurrentBlock()->left();
+        successMove = board->getCurrentBlock()->left();
     } else if (nextCommand == "right") {
-        board->getCurrentBlock()->right();
+        successMove = board->getCurrentBlock()->right();
     } else if (nextCommand == "down") {
         board->getCurrentBlock()->down();
     } else if (nextCommand == "clockwise") {
-        board->getCurrentBlock()->clockwise();
+        successMove = board->getCurrentBlock()->clockwise();
     } else if (nextCommand == "counterclockwise") { //counter
-        board->getCurrentBlock()->counter();
+        successMove = board->getCurrentBlock()->counter();
     } else if (nextCommand == "drop") {
         board->getCurrentBlock()->drop();
     } else if (nextCommand == "levelup") {
@@ -119,7 +131,9 @@ void Interpreter::executeCommand(string nextCommand) {
     } else {
         // world explosion???????
         cerr << "Interpreter::executeCommand: command not found" <<endl;
+        successMove = false;
     }
+    return successMove;
 }
 
 

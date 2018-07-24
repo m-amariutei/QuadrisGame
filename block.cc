@@ -14,7 +14,7 @@ void Block::setType(char newType) { type = newType; }
 
 
 
-void Block::right() {
+bool Block::right() {
     //create coords
     vector<pair<int,int>> coords;
     for(int i=0; i<cells.size(); i++) {
@@ -25,10 +25,13 @@ void Block::right() {
     bool isValid = board->validateCoord(coords);
 
     //move block to coords
-    if(isValid) board->moveBlock(coords);
+    if(isValid) {
+        board->moveBlock(coords);
+        return true;
+    } else return false;
 }
 
-void Block::left() {
+bool Block::left() {
      //create coords
     vector<pair<int,int>> coords;
     for(int i=0; i<cells.size(); i++) {
@@ -39,7 +42,10 @@ void Block::left() {
     bool isValid = board->validateCoord(coords);
 
     //move block to coords
-    if(isValid) board->moveBlock(coords);
+    if(isValid) {
+        board->moveBlock(coords);
+        return true;
+    } else return false;
 }
 
 bool Block::down() {
@@ -70,10 +76,65 @@ void Block::drop() {
     
 }
 
-void Block::clockwise() {
+bool Block::rotate(vector<int> values) {
+    vector<pair<int,int>> coords;
+    for (int i=0; i<cells.size(); i++) {
+        int xVal = cells.at(i)->getXValue();
+        int yVal = cells.at(i)->getYValue();
+        pair<int,int> newCoord = make_pair(xVal - values[0] + values[1], values[2] + values[3] - yVal);
+        coords.push_back(newCoord);
+        // cout<<"("<<xVal<<","<<yVal<<") -> (" << coords.at(i).first << "," << coords.at(i).second <<")"<<endl;
+    }
 
+    bool isValid = board->validateCoord(coords);
+
+    if(isValid) {
+        board->moveBlock(coords);
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void Block::counter() {
+pair<int,int> Block::getMinMaxElements(bool isX) {
+    if(isX) {
+        vector<int> xs;
+        for (int i=0; i<cells.size(); i++) {
+            xs.push_back(cells.at(i)->getXValue());
+        }
+        auto result =  minmax_element(xs.begin(), xs.end());
+        return make_pair(*result.first,*result.second);
+    } else {
+        vector<int> ys;
+        for (int i=0; i<cells.size(); i++) {
+            ys.push_back(cells.at(i)->getYValue());
+        }
+        auto result = minmax_element(ys.begin(), ys.end());
+        return make_pair(*result.first,*result.second);
+    }
+}
 
+bool Block::clockwise() {
+    pair<int,int> Xs = getMinMaxElements(true);
+    pair<int,int> Ys = getMinMaxElements(false);
+
+    vector<int> values;
+    values.push_back(Xs.first);
+    values.push_back(Ys.second);
+    values.push_back(Xs.second);
+    values.push_back(Ys.second);
+    return rotate(values);
+}
+
+bool Block::counter() {
+    pair<int,int> Xs = getMinMaxElements(true);
+    pair<int,int> Ys = getMinMaxElements(false);
+
+    vector<int> values;
+    values.push_back(Xs.first);
+    values.push_back(Ys.first);
+    values.push_back(Xs.first);
+    values.push_back(Ys.second);
+    return rotate(values);
 }

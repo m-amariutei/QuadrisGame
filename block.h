@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 #include "cell.h"
 #include "quadrisboard.h"
 
@@ -30,12 +31,14 @@ public:
     char getType();
     void setType(char newType);
 
-    void right();
-    void left();
+    bool right();
+    bool left();
     void drop();
     bool down();
-    void clockwise();
-    void counter();
+    bool clockwise();
+    bool counter();
+    bool rotate(vector<int> values);
+    pair<int,int> getMinMaxElements(bool isX);
 
     //virtual shared_ptr<Block> create(BlockType bType) = 0;
 
