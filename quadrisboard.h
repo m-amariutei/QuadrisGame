@@ -11,6 +11,7 @@
 #include "constants.h"
 #include "block.h"
 
+
 using namespace std;
 
 class Level;
@@ -46,6 +47,7 @@ public:
     void clearRow(int rowIndex);
     void dropRowsAbove(int rowIndex);
     void dropTop(int rowIndex, int colIndex);
+    bool isBlockStuck();
     bool isBlockStuck(shared_ptr<Block>);
     bool deleteCellFromBlock(shared_ptr<Block>, int, int);
     bool cellBelowIsSticky(shared_ptr<Block>, int, int);
@@ -58,7 +60,10 @@ public:
     void levelDown();
     void restart();
     void hint();
-    bool isPossible(string command);
+    bool validateCoord(vector<pair<int,int>> coordToCheck);
+    void getNextBlock();
+    void setLevel(int startLevel);
+    void moveBlock(vector<pair<int,int>> coordToCheck);
 };
 
 #endif

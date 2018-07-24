@@ -50,6 +50,11 @@ bool QuadrisBoard::isLost() {
 
 void QuadrisBoard::print(bool seeInvisible, char empty) {
 
+	cout << "Level:         " << level->getLevel() << endl;
+	cout << "Score:         " << endl;
+	cout << "Hi Score:      " << endl;
+	cout << "----------------" << endl;
+
 	int begRow = NUM_ROWS_INVISIBLE;
 	if(seeInvisible) begRow = 0;
 
@@ -67,7 +72,12 @@ void QuadrisBoard::print(bool seeInvisible, char empty) {
 			
 		}
 		cout<<endl;
+		if(i==NUM_ROWS_INVISIBLE-1) cout << "++++++++++++++++" << endl;
 	}
+
+	cout << "----------------" << endl;
+	cout << "Next:" << endl;
+	//print next piece coming
 }
 
 void QuadrisBoard::executeCommand(string name) {
@@ -156,6 +166,10 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	blockTop->getCells().push_back(cellDown);
 }
 
+bool QuadrisBoard::isBlockStuck() {
+	return isBlockStuck(currentBlock);
+}
+
 bool QuadrisBoard::isBlockStuck(shared_ptr<Block> block) {
 
 	//return true iff below any cell occupied by this block, there is a cell occupied by another block or board ends
@@ -172,7 +186,7 @@ bool QuadrisBoard::cellBelowIsSticky(shared_ptr<Block> block, int x, int y) {
 
 	else {
 		shared_ptr<Cell> cellBelow = board.at(y).at(x);
-		if (cellBelow->getBlock() != block) return true;
+		if (cellBelow->getBlock() != nullptr && cellBelow->getBlock() != block) return true;
 		else return false;
 	}
 }
@@ -238,13 +252,134 @@ void QuadrisBoard::hint() {
     //TODO
 }
 
-bool QuadrisBoard::isPossible(string command) {
-	//TODO
-	return false;
+bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {
+	cout<<"validateCoord"<<endl;
+	for(int i=0; i<coordToCheck.size(); i++) {
+		cout<<"("<<coordToCheck.at(i).first<<","<<coordToCheck.at(i).second<<")"<<endl;
+		if(coordToCheck.at(i).first < 0 || coordToCheck.at(i).first >= HEIGHT ||
+			coordToCheck.at(i).second < 0 || coordToCheck.at(i).second >= WIDTH ||
+			(board.at(coordToCheck.at(i).first).at(coordToCheck.at(i).second)->getBlock() != nullptr) &&
+			board.at(coordToCheck.at(i).first).at(coordToCheck.at(i).second)->getBlock() != currentBlock) {
+			return false;
+		}
+	}
+	return true;
 }
 
 void QuadrisBoard::replaceBlock(string blockType) {
 	//TODO
+}
+
+void QuadrisBoard::getNextBlock() {
+	char type = level->getNextBlockType();
+	cout<<type<<endl;
+	vector<shared_ptr<Cell>> cellsForBlock;
+
+	//figure out cells
+    if(type == 'I') {
+        cellsForBlock.push_back(board.at(0).at(0));
+        cellsForBlock.push_back(board.at(1).at(0));
+        cellsForBlock.push_back(board.at(2).at(0));
+        cellsForBlock.push_back(board.at(3).at(0));
+
+        currentBlock = make_shared<Block>(cellsForBlock, type);
+
+        board.at(0).at(0)->setBlock(currentBlock);
+        board.at(1).at(0)->setBlock(currentBlock);
+        board.at(2).at(0)->setBlock(currentBlock);
+        board.at(3).at(0)->setBlock(currentBlock);
+    } else if (type == 'J') {
+    	cellsForBlock.push_back(board.at(0).at(1));
+        cellsForBlock.push_back(board.at(1).at(1));
+        cellsForBlock.push_back(board.at(2).at(1));
+        cellsForBlock.push_back(board.at(2).at(0));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(0).at(1)->setBlock(currentBlock);
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    	board.at(2).at(0)->setBlock(currentBlock);
+    } else if (type == 'L') {
+    	cellsForBlock.push_back(board.at(0).at(0));
+        cellsForBlock.push_back(board.at(1).at(0));
+        cellsForBlock.push_back(board.at(2).at(0));
+        cellsForBlock.push_back(board.at(2).at(1));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(0).at(0)->setBlock(currentBlock);
+    	board.at(1).at(0)->setBlock(currentBlock);
+    	board.at(2).at(0)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    } else if (type == 'O') {
+    	cellsForBlock.push_back(board.at(1).at(0));
+        cellsForBlock.push_back(board.at(1).at(1));
+        cellsForBlock.push_back(board.at(2).at(0));
+        cellsForBlock.push_back(board.at(2).at(1));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(1).at(0)->setBlock(currentBlock);
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(2).at(0)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    } else if (type == 'S') {
+    	cellsForBlock.push_back(board.at(1).at(1));
+        cellsForBlock.push_back(board.at(1).at(2));
+        cellsForBlock.push_back(board.at(2).at(0));
+        cellsForBlock.push_back(board.at(2).at(1));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(1).at(2)->setBlock(currentBlock);
+    	board.at(2).at(0)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    } else if (type == 'T') {
+    	cellsForBlock.push_back(board.at(1).at(0));
+        cellsForBlock.push_back(board.at(1).at(1));
+        cellsForBlock.push_back(board.at(1).at(2));
+        cellsForBlock.push_back(board.at(2).at(1));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(1).at(0)->setBlock(currentBlock);
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(1).at(2)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    } else if (type == 'Z') {
+    	cellsForBlock.push_back(board.at(1).at(0));
+        cellsForBlock.push_back(board.at(1).at(1));
+        cellsForBlock.push_back(board.at(2).at(1));
+        cellsForBlock.push_back(board.at(2).at(2));
+
+    	currentBlock = make_shared<Block>(cellsForBlock, type);
+
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(1).at(1)->setBlock(currentBlock);
+    	board.at(2).at(1)->setBlock(currentBlock);
+    	board.at(2).at(2)->setBlock(currentBlock);
+    } else {
+        cerr << "Block initialized with wrong type" << endl;
+    }
+}
+
+void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {
+	for(int i=currentBlock->getCells().size()-1; i>=0; i--) {
+		currentBlock->getCells().at(i)->setBlock(nullptr);
+		currentBlock->getCells().pop_back();
+	}
+
+	vector<shared_ptr<Cell>> newCells;
+
+	for(int i=0; i<coords.size(); i++) {
+		shared_ptr<Cell> theCell = board.at(coords.at(i).first).at(coords.at(i).second);
+		theCell->setBlock(currentBlock);
+		newCells.push_back(theCell);
+	}
+	currentBlock->setCells(newCells);
+
 }
 
 //Getters and Setters -------------------------------------------------------------
@@ -265,4 +400,8 @@ void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
 
 shared_ptr<Block> QuadrisBoard::getCurrentBlock() {
 	return currentBlock;
+}
+
+void QuadrisBoard::setLevel(int startLevel) {
+	level->setLevel(startLevel);
 }

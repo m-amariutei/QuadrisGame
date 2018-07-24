@@ -1,9 +1,8 @@
 #include "block.h"
-#include <vector>
 
-Block::Block() {}
-
-Block::Block(vector<shared_ptr<Cell>> cells, char type): cells{cells}, type{type} {}
+Block::Block(vector<shared_ptr<Cell>> cells, char type): cells{cells}, type{type} {
+    board = QuadrisBoard::getInstance();
+}
 
 vector<shared_ptr<Cell>> Block::getCells() { return cells; }
 
@@ -13,30 +12,68 @@ char Block::getType() { return type; }
 
 void Block::setType(char newType) { type = newType; }
 
-void Block::right() {
-    for (int i = 0; i < cells.size(); i++) {
 
-        int current = cells.at(i)->getXValue();
-        cells.at(i)->setXValue(++current);
+
+void Block::right() {
+    //create coords
+    vector<pair<int,int>> coords;
+    for(int i=0; i<cells.size(); i++) {
+        coords.push_back(make_pair(cells.at(i)->getYValue(), cells.at(i)->getXValue() + 1));       //row, col
     }
+    
+    //validate coords
+    bool isValid = board->validateCoord(coords);
+
+    //move block to coords
+    if(isValid) board->moveBlock(coords);
 }
 
 void Block::left() {
-    for (int i = 0; i < cells.size(); i++) {
-
-        int current = cells[i]->getXValue();
-        cells.at(i)->setXValue(--current);
+     //create coords
+    vector<pair<int,int>> coords;
+    for(int i=0; i<cells.size(); i++) {
+        coords.push_back(make_pair(cells.at(i)->getYValue(), cells.at(i)->getXValue() - 1));       //row, col
     }
+    
+    //validate coords
+    bool isValid = board->validateCoord(coords);
+
+    //move block to coords
+    if(isValid) board->moveBlock(coords);
 }
 
-void Block::down() {
-    for (int i = 0; i < cells.size(); i++) {
+bool Block::down() {
+    //should always work (if not, generate new block)
 
-        int current = cells.at(i)->getYValue();
-        cells.at(i)->setYValue(++current);
+    //create coords
+    vector<pair<int,int>> coords;
+    for(int i=0; i<cells.size(); i++) {
+        coords.push_back(make_pair(cells.at(i)->getYValue() + 1, cells.at(i)->getXValue()));       //row, col
+    }
+    
+    //validate coords
+    bool isValid = board->validateCoord(coords);
+
+    //move block to coords
+    if(isValid) {
+        board->moveBlock(coords);
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
 void Block::drop() {
+    //should always work (if not, generate new block)
+    while(down());
+    
+}
+
+void Block::clockwise() {
+
+}
+
+void Block::counter() {
 
 }

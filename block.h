@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include "cell.h"
+#include "quadrisboard.h"
 
 using namespace std;
 
@@ -13,14 +14,14 @@ enum BlockType {
 };
 
 class Cell;
+class QuadrisBoard;
 
 class Block {
-protected:
+    shared_ptr<QuadrisBoard> board;
     vector<shared_ptr<Cell>> cells;
     char type;
 
 public:
-    Block();
     Block(vector<shared_ptr<Cell>> cells, char type);
 
     vector<shared_ptr<Cell>> getCells();
@@ -32,9 +33,9 @@ public:
     void right();
     void left();
     void drop();
-    void down();
-    virtual void clockwise() = 0;
-    virtual void counter() = 0;
+    bool down();
+    void clockwise();
+    void counter();
 
     //virtual shared_ptr<Block> create(BlockType bType) = 0;
 

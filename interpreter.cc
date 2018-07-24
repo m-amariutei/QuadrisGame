@@ -8,13 +8,16 @@ bool isBlockName(string command) {
 /// Change graphics display to be true by default after implementation ///
 
 Interpreter::Interpreter() : graphicsDisplay{true}, seed{0},
-                             scriptFile{"sequence.txt"}, startLevel{0} {
-
-    board = QuadrisBoard::getInstance();
-    display = make_shared<Display>(true, board);
-}
+                             scriptFile{"sequence.txt"}, startLevel{0} {}
 
 void Interpreter::startGame() {
+    cout<<"startGame()"<<endl;
+
+    board = QuadrisBoard::getInstance();
+    board->setLevel(startLevel);
+    display = make_shared<Display>(graphicsDisplay, board);
+    board->getNextBlock();
+
     string nextCommand;
     display->print(true, '-');   //TODO: display->print(false, ' ')
 
@@ -35,6 +38,20 @@ void Interpreter::startGame() {
             }
 
             executeCommand(fullCommand);
+            if(board->isBlockStuck()) {
+                cout<<"Block is stuck"<<endl;
+                if(board->isLost()) {
+                    cout << "Game Over" <<endl;
+                    return;
+                }
+
+                for(int i=0; i<HEIGHT; i++) {
+                    if(board->isFullRow(i)) {
+                        board->clearRow(i);
+                    }
+                }
+                board->getNextBlock();
+            }
         }
 
         display->print(true, '-');   //TODO: display->print(false, ' ')
@@ -108,7 +125,6 @@ bool Interpreter::getGraphicsDisplay() {
 
 void Interpreter::setGraphicsDisplay(bool graphics) {
     graphicsDisplay = graphics;
-    display->setGraphics(graphics);
 }
 
 string Interpreter::getScriptFile() {
@@ -133,11 +149,6 @@ int Interpreter::getStartLevel() {
 
 void Interpreter::setStartLevel(int level) {
     startLevel = level;
-}
-
-
-bool Interpreter::isPossible(string command) {  //do we need this?
-    return board->isPossible(command);
 }
 
 void Interpreter::renameCommand() {

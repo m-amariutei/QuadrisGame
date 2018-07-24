@@ -40,7 +40,6 @@ public:
     int getStartLevel();
     void setStartLevel(int level);
 
-    bool isPossible(string);
     void renameCommand();
 
     ~Interpreter();

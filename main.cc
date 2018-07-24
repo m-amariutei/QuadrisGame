@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
 
-    Interpreter* gameInterpreter = new Interpreter();
+    shared_ptr<Interpreter> gameInterpreter = make_shared<Interpreter>();
 
     for (int i = 0; i < argc; i++) {
 
@@ -37,7 +37,5 @@ int main(int argc, char *argv[]) {
     }
 
     gameInterpreter->startGame();
-
-    delete gameInterpreter;
 
 }
