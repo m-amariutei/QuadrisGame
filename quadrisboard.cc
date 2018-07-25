@@ -32,8 +32,13 @@ void QuadrisBoard::initialize() {
 	}
 
 	currentBlock = nullptr;	//no blocks
+	nextBlock = ' ';
 	level = make_shared<Level>(0); //fix
 
+}
+
+void QuadrisBoard::setNextBlock() {
+	nextBlock = level->getNextBlockType();
 }
 
 bool QuadrisBoard::isLost() {
@@ -78,7 +83,7 @@ void QuadrisBoard::print(bool seeInvisible, char empty) {
 	}
 
 	cout << "----------------" << endl;
-	cout << "Next:" << endl;
+	cout << "Next Block: " << nextBlock << endl;
 	//print next piece coming
 }
 
@@ -244,6 +249,7 @@ void QuadrisBoard::restart() {
 
     //wipe board content
     currentBlock = nullptr;
+    nextBlock = level->getNextBlockType();
 }
 
 void QuadrisBoard::hint() {
@@ -270,16 +276,19 @@ void QuadrisBoard::replaceBlock(string blockType) {
 
 void QuadrisBoard::getNextBlock() {
 
-    char type;
+    char type = nextBlock;
+    char nextType;
 
     if (level !=  0) {
-        type = level->getNextBlockType();
+        nextType = level->getNextBlockType();
     } else {
-        //type =
+        nextType = level->getNextBlockType(); //TODO?
     }
 
-	cout<<"getNextBlock: "<<type<<endl;
+	//cout<<"getNextBlock type: "<<nextType<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
+
+	nextBlock = nextType;
 
 	//figure out cells
     if(type == 'I') {
@@ -369,6 +378,8 @@ void QuadrisBoard::getNextBlock() {
     } else {
         cerr << "Block initialized with wrong type" << endl;
     }
+
+    if(currentBlock == nullptr) getNextBlock();
 }
 
 void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {

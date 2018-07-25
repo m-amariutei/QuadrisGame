@@ -24,6 +24,7 @@ class QuadrisBoard {
     QuadrisBoard();
     vector<vector<shared_ptr<Cell>>> board; //11x18
     shared_ptr<Block> currentBlock;
+    char nextBlock;
     shared_ptr<Level> level;
 
 
@@ -54,7 +55,7 @@ public:
     //Interpreter *patternMatchName(string name); //......add shared ptr
 
     void replaceBlock(string blockType);
-
+    void setNextBlock();
     //~QuadrisBoard();
     void levelUp();
     void levelDown();

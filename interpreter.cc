@@ -21,6 +21,7 @@ void Interpreter::startGame() {
 
     board = QuadrisBoard::getInstance();
     board->setLevel(startLevel);
+    board->setNextBlock();
     display = make_shared<Display>(graphicsDisplay, board);
 
     board->getNextBlock();
