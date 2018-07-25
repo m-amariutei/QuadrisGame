@@ -25,7 +25,7 @@ void Interpreter::startGame() {
 
     board->setNextBlock();
 
-    display = make_shared<Display>(graphicsDisplay, board);
+    display = make_shared<DisplayType>(graphicsDisplay, board);
 
     board->getNextBlock();
     board->getCurrentBlock()->down();

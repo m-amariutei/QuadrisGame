@@ -21,7 +21,7 @@ public:
     bool getGraphics();
     void setGraphics(bool newGraphics);
 
-    void printT(bool showHidden = true, char empty = ' ');
+    void print(bool showHidden = true, char empty = ' ');
 };
 
 #endif

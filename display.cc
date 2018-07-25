@@ -13,7 +13,7 @@ void DisplayType::setGraphics(bool newGraphics) {
 	newGraphics = graphics;
 }
 
-void DisplayType::printT(bool showHidden, char empty) {
+void DisplayType::print(bool showHidden, char empty) {
 	if(graphics) {
 
 		quadrisboard->printText(showHidden, empty);
