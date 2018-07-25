@@ -290,7 +290,48 @@ bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
 }
 
 void QuadrisBoard::replaceBlock(string blockType) {
-	//TODO
+	char newType = blockType.at(0);
+	if(currentBlock->getType == newType) return;
+
+	pair<int,int> leftLow = make_pair(0,0);	//row, col
+	for(int i=0; i<currentBlock->getCells().size(); i++) {
+		int row = currentBlock->getCells().at(i).getYValue();
+		int col = currentBlock->getCells().at(i).getXValue();
+		if(row <= leftLow.first) {
+			if(col <= leftLow.second) {
+				leftLow = make_pair(row,col);
+			}
+		} else if (row < leftLow.first) {
+			leftLow = make_pair(row,col);
+		}
+
+		currentBlock->getCells().at(i)->setBlock(nullptr);
+	}
+
+	if(newType == 'I') {
+		vector<shared_ptr<Cell>> cellsForBlock;
+		// cellsForBlock.push_back(board.at(0).at(0));
+		currentBlock = make_shared<Block>(cellsForBlock, type);
+		// board.at(0).at(0)->setBlock(currentBlock);
+
+	} else if(newType == 'J') {
+
+	} else if(newType == 'I') {
+
+	} else if(newType == 'L') {
+
+	} else if(newType == 'O') {
+
+	} else if(newType == 'S') {
+
+	} else if(newType == 'T') {
+
+	} else if(newType == 'Z') {
+
+	} else {
+		cerr << "replaceBlock with invalid type " << newType <<endl;
+		return;
+	}
 
 }
 
