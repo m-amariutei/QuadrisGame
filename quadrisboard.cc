@@ -32,6 +32,7 @@ void QuadrisBoard::initialize() {
 	}
 
 	currentBlock = nullptr;	//no blocks
+	nextBlock = ' ';
 	score = 0;
 	highScore = 0;
 
@@ -39,26 +40,32 @@ void QuadrisBoard::initialize() {
 
 void QuadrisBoard::checkClearedBlocks() {
 
-    for (int i = 0; i < blocksOnBoard.size(); i++) {
-        if (blocksOnBoard[i]->hasNoCells()) {
+	for (int i = 0; i < blocksOnBoard.size(); i++) {
+		if (blocksOnBoard[i]->hasNoCells()) {
 
-            int levelPoints = blocksOnBoard[i]->getLevelInitialized() + 1;
-            levelPoints = levelPoints * levelPoints;
+			int levelPoints = blocksOnBoard[i]->getLevelInitialized() + 1;
+			levelPoints = levelPoints * levelPoints;
 
-            addToScore(levelPoints);
+			addToScore(levelPoints);
 
-            blocksOnBoard.erase(blocksOnBoard.begin() + i);
-            i--;
-        }
+			blocksOnBoard.erase(blocksOnBoard.begin() + i);
+			i--;
+		}
 
-    }
+	}
+}
+
+void QuadrisBoard::setNextBlock() {
+	nextBlock = level->getNextBlockType();
 }
 
 bool QuadrisBoard::isLost() {
 
 	for (int i = 0; i < WIDTH; i++) {
 
-		if(board.at(LOST_ROW).at(i)->getBlock() != nullptr)  {
+		if(board.at(LOST_ROW).at(i)->getBlock() != nullptr && board.at(LOST_ROW).at(i)->getBlock() != currentBlock )  {
+			return true;
+		} else if (board.at(LOST_ROW).at(i)->getBlock() != nullptr && board.at(LOST_ROW).at(i)->getBlock() == currentBlock && isBlockStuck()) {
 			return true;
 		}
 	}
@@ -94,7 +101,7 @@ void QuadrisBoard::print(bool seeInvisible, char empty) {
 	}
 
 	cout << "----------------" << endl;
-	cout << "Next:" << endl;
+	cout << "Next Block: " << nextBlock << endl;
 	//print next piece coming
 }
 
@@ -260,6 +267,7 @@ void QuadrisBoard::restart() {
 
     //wipe board content
     currentBlock = nullptr;
+    nextBlock = level->getNextBlockType();
 }
 
 void QuadrisBoard::hint() {
@@ -292,16 +300,19 @@ void QuadrisBoard::replaceBlock(string blockType) {
 
 void QuadrisBoard::getNextBlock() {
 
-    char type;
+    char type = nextBlock;
+    char nextType;
 
     if (level !=  0) {
-        type = level->getNextBlockType();
+        nextType = level->getNextBlockType();
     } else {
-        //type =
+        nextType = level->getNextBlockType(); //TODO?
     }
 
-	cout<<type<<endl;
+	//cout<<"getNextBlock type: "<<nextType<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
+
+	nextBlock = nextType;
 
 	//figure out cells
     if(type == 'I') {
@@ -392,6 +403,7 @@ void QuadrisBoard::getNextBlock() {
         cerr << "Block initialized with wrong type" << endl;
     }
 
+	if(currentBlock == nullptr) getNextBlock();
     blocksOnBoard.push_back(currentBlock);
     cout << "BLOCKSONBOARD added " << currentBlock->getType() << endl;
 }

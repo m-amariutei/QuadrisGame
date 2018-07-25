@@ -23,9 +23,14 @@ void Interpreter::startGame() {
     shared_ptr<Level> level = make_shared<Level>(startLevel, scriptFile);
     board->setLevel(level);
 
+    board->setNextBlock();
+
     display = make_shared<Display>(graphicsDisplay, board);
 
     board->getNextBlock();
+    board->getCurrentBlock()->down();
+    board->getCurrentBlock()->down();
+    board->getCurrentBlock()->down();
 
     string nextCommand;
     display->print(true, '-');   //TODO: display->print(false, ' ')
@@ -77,13 +82,21 @@ void Interpreter::startGame() {
             cout<<"Trying to execute command: "<<fullCommand<<endl;
 
             while (multiplier > 0) {
-
+                cout<<"multiplier: "<<multiplier<<endl;
                 bool successMove = executeCommand(fullCommand);
                 if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
                     executeCommand("down");
                 }
 
-                if (!board->getCurrentBlock()) board->getNextBlock();
+                if(!board->getCurrentBlock()) {
+                    board->getNextBlock();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    if (checkIfLost()) {
+                        return;
+                    }
+                }
 
                 if (board->isBlockStuck()) {
                     cout << "Block is stuck" << endl;
@@ -109,13 +122,29 @@ void Interpreter::startGame() {
                     }
 
                     board->getNextBlock();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    if (checkIfLost()) {
+                        return;
+                    }
                 }
+
                 multiplier--;
             }
         }
 
         display->print(true, '-');   //TODO: display->print(false, ' ')
     }
+}
+
+bool Interpreter::checkIfLost() {
+    if(board->isLost()) {
+        cout << "Game Over" <<endl;
+        display->print(true, '-');   //TODO: display->print(false, ' ')
+        return true;
+    }
+    return false;
 }
 
 

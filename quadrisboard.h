@@ -27,6 +27,7 @@ class QuadrisBoard {
 
     vector<vector<shared_ptr<Cell>>> board;
     shared_ptr<Block> currentBlock;
+    char nextBlock;
     shared_ptr<Level> level;
 
     vector<shared_ptr<Block>> blocksOnBoard;
@@ -64,6 +65,7 @@ public:
     void replaceBlock(string blockType);
     void addToScore(int newScore);
     void checkClearedBlocks();
+    void setNextBlock();
 
     //~QuadrisBoard();
     void levelUp();

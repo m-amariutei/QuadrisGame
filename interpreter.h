@@ -47,7 +47,7 @@ public:
 protected:
     string interpretCommand(string nextCommand);
     bool executeCommand(string nextCommand);
-
+    bool checkIfLost();
 };
 
 #endif
