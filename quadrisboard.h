@@ -24,7 +24,7 @@ class QuadrisBoard {
 
     // Singleton design pattern
     static shared_ptr<QuadrisBoard>instance;
-    QuadrisBoard(Xwindow* xwindow = NULL);
+    QuadrisBoard(bool graphics = true);
     Xwindow *xw;
 
     vector<vector<shared_ptr<Cell>>> board;

@@ -21,11 +21,11 @@ void Interpreter::startGame() {
 
     board = QuadrisBoard::getInstance(graphicsDisplay);
 
-    if(graphicsDisplay) {
-        cout<<"graphics"<<endl;
-        board->setXW();
-        cout<<"done2"<<endl;
-    }
+    //if(graphicsDisplay) {
+     //   cout<<"graphics"<<endl;
+     //   board->setXW();
+     //   cout<<"done2"<<endl;
+    //}
     shared_ptr<Level> level = make_shared<Level>(startLevel, scriptFile);
     board->setLevel(level);
 
