@@ -1,3 +1,4 @@
+#include <sstream>
 #include "interpreter.h"
 
 bool isMove(string s) {
@@ -21,6 +22,7 @@ void Interpreter::startGame() {
     board = QuadrisBoard::getInstance();
     board->setLevel(startLevel);
     display = make_shared<Display>(graphicsDisplay, board);
+
     board->getNextBlock();
     board->getCurrentBlock()->down();
     board->getCurrentBlock()->down();
@@ -30,8 +32,34 @@ void Interpreter::startGame() {
     display->print(true, '-');   //TODO: display->print(false, ' ')
 
     while (cin >> nextCommand) {
+
         cout<<"Got command"<<endl;
-        if(nextCommand.length() <= 1 && isBlockName(nextCommand)) {
+        int multiplier = 1;
+
+        if (47 < nextCommand[0] && nextCommand[0] < 58) {
+
+            string number = "";
+            int i = 0;
+
+            // Get multiplier number from command line
+            // Takes into account if it is multiple digits
+            while (47 < nextCommand[i] && nextCommand[i] < 58) {
+                number += nextCommand[i];
+                i++;
+            }
+
+            // Make string an int
+            stringstream(number) >> multiplier;
+
+            // Remove numbers from command before trying to interpret
+            int totalLen = nextCommand.length();
+            nextCommand = nextCommand.substr(i, totalLen);
+
+        }
+
+
+        if (nextCommand.length() <= 1 && isBlockName(nextCommand)) {
+
             cout<<"Trying to replace block"<<endl;
             board->replaceBlock(nextCommand);
             //don't drop
@@ -48,43 +76,50 @@ void Interpreter::startGame() {
             }
 
             cout<<"Trying to execute command: "<<fullCommand<<endl;
-            bool successMove = executeCommand(fullCommand);
-            if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
-                executeCommand("down");
-            }
 
-            if(!board->getCurrentBlock()) {
-                board->getNextBlock();
-                board->getCurrentBlock()->down();
-                board->getCurrentBlock()->down();
-                board->getCurrentBlock()->down();
-                if (checkIfLost()) {
-                    cout<<"AAA"<<endl;
-                    return;
-                }
-            }
+            while (multiplier > 0) {
 
-            if(board->isBlockStuck()) {
-                cout<<"Block is stuck"<<endl;
-                if (checkIfLost()) {
-                    cout<<"BBB"<<endl;
-                    return;
+                bool successMove = executeCommand(fullCommand);
+                if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
+                    executeCommand("down");
                 }
 
-                for(int i=0; i<HEIGHT; i++) {
-                    if(board->isFullRow(i)) {
-                        cout<<"Row "<<i<<" is full"<<endl;
-                        board->clearRow(i);
+                if(!board->getCurrentBlock()) {
+                    board->getNextBlock();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    if (checkIfLost()) {
+                        return;
                     }
                 }
+
+                if (board->isBlockStuck()) {
+                    cout << "Block is stuck" << endl;
+                    if (board->isLost()) {
+                        cout << "Game Over" << endl;
+                        display->print(true, '-');   //TODO: display->print(false, ' ')
+                        return;
+                    }
+
+                    for (int i = 0; i < HEIGHT; i++) {
+                        if (board->isFullRow(i)) {
+                            cout << "Row " << i << " is full" << endl;
+                            board->clearRow(i);
+                        }
+                    }
+                    board->getNextBlock();
+                }
+
                 board->getNextBlock();
                 board->getCurrentBlock()->down();
                 board->getCurrentBlock()->down();
                 board->getCurrentBlock()->down();
                 if (checkIfLost()) {
-                    cout<<"CCC"<<endl;
                     return;
                 }
+
+                multiplier--;
             }
         }
 
