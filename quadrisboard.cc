@@ -40,7 +40,9 @@ bool QuadrisBoard::isLost() {
 
 	for (int i = 0; i < WIDTH; i++) {
 
-		if(board.at(LOST_ROW).at(i)->getBlock() != nullptr)  {
+		if(board.at(LOST_ROW).at(i)->getBlock() != nullptr && board.at(LOST_ROW).at(i)->getBlock() != currentBlock )  {
+			return true;
+		} else if (board.at(LOST_ROW).at(i)->getBlock() != nullptr && board.at(LOST_ROW).at(i)->getBlock() == currentBlock && isBlockStuck()) {
 			return true;
 		}
 	}
@@ -276,7 +278,7 @@ void QuadrisBoard::getNextBlock() {
         //type =
     }
 
-	cout<<type<<endl;
+	cout<<"getNextBlock: "<<type<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
 
 	//figure out cells
