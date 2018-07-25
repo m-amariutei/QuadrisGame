@@ -18,15 +18,20 @@ class Cell;
 class QuadrisBoard;
 
 class Block {
+
     shared_ptr<QuadrisBoard> board;
     vector<shared_ptr<Cell>> cells;
+    int levelInitialized;
     char type;
 
 public:
-    Block(vector<shared_ptr<Cell>> cells, char type);
+    Block(vector<shared_ptr<Cell>> cells, char type, int level);
 
     vector<shared_ptr<Cell>> getCells();
     void setCells(vector<shared_ptr<Cell>> newCells);
+
+    int getLevelInitialized();
+    void setLevelInitialized(int level);
 
     char getType();
     void setType(char newType);
@@ -39,6 +44,8 @@ public:
     bool counter();
     bool rotate(vector<int> values);
     pair<int,int> getMinMaxElements(bool isX);
+
+    bool hasNoCells();
 
     //virtual shared_ptr<Block> create(BlockType bType) = 0;
 

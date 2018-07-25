@@ -21,7 +21,7 @@ class Level {
 public:
 
     // Constructor
-    Level(int level);
+    Level(int level, string input);
 
     // Getters and Setters
     int getLevel();

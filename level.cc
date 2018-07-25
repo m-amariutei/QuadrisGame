@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Level::Level(int level) : level{level} {
+Level::Level(int level, string input) : level{level}, inputFile{input} {
 
     fileIn.open(inputFile.c_str());
     if(level >= 3) heavy = true;

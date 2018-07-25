@@ -20,7 +20,9 @@ void Interpreter::startGame() {
     cout<<"startGame()"<<endl;
 
     board = QuadrisBoard::getInstance();
-    board->setLevel(startLevel);
+    shared_ptr<Level> level = make_shared<Level>(startLevel, scriptFile);
+    board->setLevel(level);
+
     display = make_shared<Display>(graphicsDisplay, board);
 
     board->getNextBlock();
@@ -91,12 +93,21 @@ void Interpreter::startGame() {
                         return;
                     }
 
+                    int cleared = 0;
                     for (int i = 0; i < HEIGHT; i++) {
                         if (board->isFullRow(i)) {
                             cout << "Row " << i << " is full" << endl;
                             board->clearRow(i);
+                            cleared++;
                         }
                     }
+                    int newPoints = ((level->getLevel() * cleared) * (level->getLevel() * cleared));
+                    board->addToScore(newPoints);
+
+                    if (cleared > 0) {
+                        board->checkClearedBlocks();
+                    }
+
                     board->getNextBlock();
                 }
                 multiplier--;

@@ -1,12 +1,15 @@
 #include "block.h"
 
-Block::Block(vector<shared_ptr<Cell>> cells, char type): cells{cells}, type{type} {
+Block::Block(vector<shared_ptr<Cell>> cells, char type, int level): cells{cells}, type{type}, levelInitialized{level} {
     board = QuadrisBoard::getInstance();
 }
 
 vector<shared_ptr<Cell>> Block::getCells() { return cells; }
 
 void Block::setCells(vector<shared_ptr<Cell>> newCells) { cells = newCells; }
+
+int Block::getLevelInitialized() { return levelInitialized; }
+void Block::setLevelInitialized(int level) { levelInitialized = level; }
 
 char Block::getType() { return type; }
 
@@ -137,4 +140,9 @@ bool Block::counter() {
     values.push_back(Xs.first);
     values.push_back(Ys.second);
     return rotate(values);
+}
+
+bool Block::hasNoCells() {
+
+    return cells.empty();
 }

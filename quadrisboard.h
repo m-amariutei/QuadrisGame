@@ -19,12 +19,20 @@ class Block;
 class Cell;
 
 class QuadrisBoard {
+
     // Singleton design pattern
     static shared_ptr<QuadrisBoard>instance;
     QuadrisBoard();
-    vector<vector<shared_ptr<Cell>>> board; //11x18
+
+
+    vector<vector<shared_ptr<Cell>>> board;
     shared_ptr<Block> currentBlock;
     shared_ptr<Level> level;
+
+    vector<shared_ptr<Block>> blocksOnBoard;
+
+    int score;
+    int highScore;
 
 
 public:
@@ -54,6 +62,8 @@ public:
     //Interpreter *patternMatchName(string name); //......add shared ptr
 
     void replaceBlock(string blockType);
+    void addToScore(int newScore);
+    void checkClearedBlocks();
 
     //~QuadrisBoard();
     void levelUp();
@@ -62,7 +72,7 @@ public:
     void hint();
     bool validateCoord(vector<pair<int,int>> coordToCheck);
     void getNextBlock();
-    void setLevel(int startLevel);
+    void setLevel(shared_ptr<Level> level);
     void moveBlock(vector<pair<int,int>> coordToCheck);
 };
 

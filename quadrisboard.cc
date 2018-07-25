@@ -32,8 +32,26 @@ void QuadrisBoard::initialize() {
 	}
 
 	currentBlock = nullptr;	//no blocks
-	level = make_shared<Level>(0); //fix
+	score = 0;
+	highScore = 0;
 
+}
+
+void QuadrisBoard::checkClearedBlocks() {
+
+    for (int i = 0; i < blocksOnBoard.size(); i++) {
+        if (blocksOnBoard[i]->hasNoCells()) {
+
+            int levelPoints = blocksOnBoard[i]->getLevelInitialized() + 1;
+            levelPoints = levelPoints * levelPoints;
+
+            addToScore(levelPoints);
+
+            blocksOnBoard.erase(blocksOnBoard.begin() + i);
+            i--;
+        }
+
+    }
 }
 
 bool QuadrisBoard::isLost() {
@@ -51,8 +69,8 @@ bool QuadrisBoard::isLost() {
 void QuadrisBoard::print(bool seeInvisible, char empty) {
 
 	cout << "Level:         " << level->getLevel() << endl;
-	cout << "Score:         " << endl;
-	cout << "Hi Score:      " << endl;
+	cout << "Score:         " << score << endl;
+	cout << "High Score:      " << highScore << endl;
 	cout << "----------------" << endl;
 
 	int begRow = NUM_ROWS_INVISIBLE;
@@ -266,6 +284,12 @@ void QuadrisBoard::replaceBlock(string blockType) {
 
 }
 
+ void QuadrisBoard::addToScore(int newScore) {
+	score += newScore;
+
+	if (score > highScore) highScore = score;
+}
+
 void QuadrisBoard::getNextBlock() {
 
     char type;
@@ -286,7 +310,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(0));
         cellsForBlock.push_back(board.at(3).at(0));
 
-        currentBlock = make_shared<Block>(cellsForBlock, type);
+        currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
         board.at(0).at(0)->setBlock(currentBlock);
         board.at(1).at(0)->setBlock(currentBlock);
@@ -298,7 +322,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(1));
         cellsForBlock.push_back(board.at(2).at(0));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(0).at(1)->setBlock(currentBlock);
     	board.at(1).at(1)->setBlock(currentBlock);
@@ -310,7 +334,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(0));
         cellsForBlock.push_back(board.at(2).at(1));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(0).at(0)->setBlock(currentBlock);
     	board.at(1).at(0)->setBlock(currentBlock);
@@ -322,7 +346,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(0));
         cellsForBlock.push_back(board.at(2).at(1));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(1).at(0)->setBlock(currentBlock);
     	board.at(1).at(1)->setBlock(currentBlock);
@@ -334,7 +358,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(0));
         cellsForBlock.push_back(board.at(2).at(1));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(1).at(1)->setBlock(currentBlock);
     	board.at(1).at(2)->setBlock(currentBlock);
@@ -346,7 +370,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(1).at(2));
         cellsForBlock.push_back(board.at(2).at(1));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(1).at(0)->setBlock(currentBlock);
     	board.at(1).at(1)->setBlock(currentBlock);
@@ -358,7 +382,7 @@ void QuadrisBoard::getNextBlock() {
         cellsForBlock.push_back(board.at(2).at(1));
         cellsForBlock.push_back(board.at(2).at(2));
 
-    	currentBlock = make_shared<Block>(cellsForBlock, type);
+    	currentBlock = make_shared<Block>(cellsForBlock, type, level->getLevel());
 
     	board.at(1).at(1)->setBlock(currentBlock);
     	board.at(1).at(1)->setBlock(currentBlock);
@@ -367,10 +391,13 @@ void QuadrisBoard::getNextBlock() {
     } else {
         cerr << "Block initialized with wrong type" << endl;
     }
+
+    blocksOnBoard.push_back(currentBlock);
+    cout << "BLOCKSONBOARD added " << currentBlock->getType() << endl;
 }
 
 void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {
-	for(int i=currentBlock->getCells().size()-1; i>=0; i--) {
+	for(int i = currentBlock->getCells().size()-1; i>=0; i--) {
 		currentBlock->getCells().at(i)->setBlock(nullptr);
 		currentBlock->getCells().pop_back();
 	}
@@ -392,12 +419,6 @@ vector<vector<shared_ptr<Cell>>> QuadrisBoard::getBoard() { return board; }
 
 void QuadrisBoard::setBoard(vector<vector<shared_ptr<Cell>>> newBoard) { board = newBoard; }
 
-/*
-int QuadrisBoard::getCurrentBlockIndex() { return currentBlockIndex; }
-
-void QuadrisBoard::setCurrentBlockIndex(int newCurrentBlockIndex) { currentBlockIndex = newCurrentBlockIndex; }
-*/
-
 shared_ptr<Level> QuadrisBoard::getLevel() { return level; }
 
 void QuadrisBoard::setLevels(shared_ptr<Level> newLevels) { level = newLevels; }
@@ -406,6 +427,8 @@ shared_ptr<Block> QuadrisBoard::getCurrentBlock() {
 	return currentBlock;
 }
 
-void QuadrisBoard::setLevel(int startLevel) {
-	level->setLevel(startLevel);
+void QuadrisBoard::setLevel(shared_ptr<Level> newLevel) {
+
+	level = newLevel;
+
 }
