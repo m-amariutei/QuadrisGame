@@ -15,11 +15,10 @@ void DisplayType::setGraphics(bool newGraphics) {
 
 void DisplayType::print(bool showHidden, char empty) {
 	if(graphics) {
-
 		quadrisboard->printText(showHidden, empty);
+		quadrisboard->printGraphic(showHidden);
 
 	} else {
-
-		quadrisboard->printGraphic(showHidden);
+		quadrisboard->printText(showHidden, empty);
 	}
 }

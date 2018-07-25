@@ -15,6 +15,16 @@ QuadrisBoard::QuadrisBoard() {
 	initialize();
 }
 
+QuadrisBoard::~QuadrisBoard() {
+	delete xw;
+}
+
+void QuadrisBoard::setXW() {
+	cout<<"QuadrisBoard::setXW"<<endl;
+	xw = new Xwindow();
+	cout<<"QuadrisBoard::setXW done"<<endl;
+}
+
 void QuadrisBoard::initialize() {
 
 	for (int i = 0; i < HEIGHT; i++) {
@@ -35,7 +45,7 @@ void QuadrisBoard::initialize() {
 	nextBlock = ' ';
 	score = 0;
 	highScore = 0;
-
+	xw = NULL;
 }
 
 void QuadrisBoard::checkClearedBlocks() {
@@ -135,7 +145,6 @@ void QuadrisBoard::printGraphic(bool seeInvisible) {
 
 		for(int j = 0; j < WIDTH; j++) {
 
-			auto xw = Xwindow();
 			auto block = board.at(i).at(j)->getBlock();
 			int colour = Xwindow::Black;
 			int x = board.at(i).at(j)->getXValue();
@@ -148,7 +157,7 @@ void QuadrisBoard::printGraphic(bool seeInvisible) {
 			} else {
 				colour = Xwindow::White;
 			}
-			xw.fillRectangle(xMargin + 30*x, yMargin + 30*y, 29, 29, colour);
+			xw->fillRectangle(xMargin + 30*x, yMargin + 30*y, 29, 29, colour);
 
 		}
 

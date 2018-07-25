@@ -18,13 +18,14 @@ using namespace std;
 class Level;
 class Block;
 class Cell;
+class Xwindow;
 
 class QuadrisBoard {
 
     // Singleton design pattern
     static shared_ptr<QuadrisBoard>instance;
     QuadrisBoard();
-
+    Xwindow *xw;
 
     vector<vector<shared_ptr<Cell>>> board;
     shared_ptr<Block> currentBlock;
@@ -38,7 +39,7 @@ class QuadrisBoard {
 
 
 public:
-
+    ~QuadrisBoard();
     static shared_ptr<QuadrisBoard> getInstance();
 
     vector<vector<shared_ptr<Cell>>> getBoard();
@@ -79,6 +80,8 @@ public:
     void getNextBlock();
     void setLevel(shared_ptr<Level> level);
     void moveBlock(vector<pair<int,int>> coordToCheck);
+
+    void setXW();
 };
 
 #endif

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <memory>
+#include "window.h"
 #include "quadrisboard.h"
 
 using namespace std;

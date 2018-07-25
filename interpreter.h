@@ -8,11 +8,13 @@
 #include "level.h"
 #include "constants.h"
 #include "display.h"
+#include "window.h"
 
 using namespace std;
 
 class DisplayType;
 class QuadrisBoard;
+class Xwindow;
 
 class Interpreter {
 
