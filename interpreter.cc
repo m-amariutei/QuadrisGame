@@ -20,7 +20,9 @@ void Interpreter::startGame() {
     cout<<"startGame()"<<endl;
 
     board = QuadrisBoard::getInstance();
-    shared_ptr<Level> level = make_shared<Level>(startLevel, scriptFile);
+
+    shared_ptr<Level> level = Level::getInstance(startLevel, scriptFile);
+    level->setSeed(seed);
     board->setLevel(level);
 
     board->setNextBlock();
@@ -75,8 +77,21 @@ void Interpreter::startGame() {
 
             string fullCommand = interpretCommand(nextCommand);
 
+
             if (fullCommand == "") {
                 continue;
+            }
+
+            if (fullCommand == "norandom") {
+                string newScriptFile;
+                cin >> newScriptFile;
+                setScriptFile(newScriptFile);
+                level->setRandom(false);
+                level->setInputFile(newScriptFile);
+            }
+
+            if (fullCommand == "random") {
+                level->setRandom(true);
             }
 
             cout<<"Trying to execute command: "<<fullCommand<<endl;
@@ -87,6 +102,8 @@ void Interpreter::startGame() {
                 if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
                     executeCommand("down");
                 }
+
+                if (fullCommand == "drop" || !isMove(fullCommand)) {multiplier = 0;}
 
                 if(!board->getCurrentBlock()) {
                     board->getNextBlock();
@@ -101,8 +118,11 @@ void Interpreter::startGame() {
                 if (board->isBlockStuck()) {
                     cout << "Block is stuck" << endl;
                     if (board->isLost()) {
-                        cout << "Game Over" << endl;
                         display->print(true, '-');   //TODO: display->print(false, ' ')
+
+                        cout << "Game Over" << endl;
+                        cout << "You have lost, please play again!" << endl;
+
                         return;
                     }
 
@@ -201,6 +221,10 @@ bool Interpreter::executeCommand(string nextCommand) {
         board->restart();
     } else if (nextCommand == "hint") {
         board->hint();
+    } else if (nextCommand == "random") {
+        board->setNextBlock();
+    } else if (nextCommand == "norandom") {
+        board->setNextBlock();
     } else {
         // world explosion???????
         cerr << "Interpreter::executeCommand: command not found" <<endl;

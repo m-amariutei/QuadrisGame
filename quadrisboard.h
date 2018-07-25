@@ -46,6 +46,8 @@ public:
     shared_ptr<Level> getLevel();
     void setLevels(shared_ptr<Level> newLevels);
 
+    void setNextBlock(char block);
+
     shared_ptr<Block> getCurrentBlock();
 
     void initialize();
@@ -72,6 +74,8 @@ public:
     void levelDown();
     void restart();
     void hint();
+    void random();
+    void norandom();
     bool validateCoord(vector<pair<int,int>> coordToCheck);
     void getNextBlock();
     void setLevel(shared_ptr<Level> level);

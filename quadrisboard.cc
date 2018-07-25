@@ -36,6 +36,7 @@ void QuadrisBoard::initialize() {
 	score = 0;
 	highScore = 0;
 
+
 }
 
 void QuadrisBoard::checkClearedBlocks() {
@@ -252,6 +253,7 @@ void QuadrisBoard::levelDown() {
 }
 
 void QuadrisBoard::restart() {
+	cout << "were trying our best to restart" << endl;
     //wipe cells content
     for(int i=0; i<HEIGHT; i++) {
         for(int j=0; j<WIDTH; j++) {
@@ -267,6 +269,7 @@ void QuadrisBoard::restart() {
 
     //wipe board content
     currentBlock = nullptr;
+    score = 0;
     nextBlock = level->getNextBlockType();
 }
 
@@ -303,11 +306,15 @@ void QuadrisBoard::getNextBlock() {
     char type = nextBlock;
     char nextType;
 
-    if (level !=  0) {
-        nextType = level->getNextBlockType();
-    } else {
-        nextType = level->getNextBlockType(); //TODO?
-    }
+    nextType = level->getNextBlockType();
+
+        if (nextType == '0') {
+            print(true, '-');
+            cout << "You have reached the end of the script file! Play at level 1 for more pieces" << endl;
+            exit(0);
+        }
+
+
 
 	//cout<<"getNextBlock type: "<<nextType<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
@@ -405,7 +412,7 @@ void QuadrisBoard::getNextBlock() {
 
 	if(currentBlock == nullptr) getNextBlock();
     blocksOnBoard.push_back(currentBlock);
-    cout << "BLOCKSONBOARD added " << currentBlock->getType() << endl;
+
 }
 
 void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {
