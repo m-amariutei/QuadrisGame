@@ -17,12 +17,13 @@ Interpreter::Interpreter() : graphicsDisplay{true}, seed{0},
                              scriptFile{"sequence.txt"}, startLevel{0} {}
 
 void Interpreter::startGame() {
-    cout<<"startGame()"<<endl;
+    cout << "startGame()" << endl;
 
     board = QuadrisBoard::getInstance();
 
     shared_ptr<Level> level = Level::getInstance(startLevel, scriptFile);
     level->setSeed(seed);
+    level->setDropsWithoutClear(0);
     board->setLevel(level);
 
     board->setNextBlock();
@@ -127,6 +128,8 @@ void Interpreter::startGame() {
                     }
 
                     int cleared = 0;
+                    int drops = level->getDropsWithoutClear();
+
                     for (int i = 0; i < HEIGHT; i++) {
                         if (board->isFullRow(i)) {
                             cout << "Row " << i << " is full" << endl;
@@ -139,6 +142,9 @@ void Interpreter::startGame() {
 
                     if (cleared > 0) {
                         board->checkClearedBlocks();
+                        level->setDropsWithoutClear(0);
+                    } else {
+                        level->setDropsWithoutClear(++drops);
                     }
 
                     board->getNextBlock();

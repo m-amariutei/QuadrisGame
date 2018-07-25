@@ -15,8 +15,6 @@ char Block::getType() { return type; }
 
 void Block::setType(char newType) { type = newType; }
 
-
-
 bool Block::right() {
     //create coords
     vector<pair<int,int>> coords;

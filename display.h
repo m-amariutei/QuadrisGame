@@ -16,12 +16,11 @@ class Display {
 
 public:
     Display(bool newGraphics, shared_ptr<QuadrisBoard> newBoard);
-    //~Display();
 
     bool getGraphics();
     void setGraphics(bool newGraphics);
 
-    void print(bool showHidden = true, char empty = ' ');
+    void print(bool showHidden = true, char empty = '-');
 };
 
 #endif

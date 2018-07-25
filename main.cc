@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
 
             int seed;
             stringstream(argv[++i]) >> seed;
+            srand(seed);
 
             gameInterpreter->setSeed(seed);
         } else if (spec == "-scriptfile") {

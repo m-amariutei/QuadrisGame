@@ -24,6 +24,7 @@ class Level {
 
     std::string inputFile;
     std::ifstream fileIn;
+    int dropsWithoutClear;
 
 public:
 
@@ -34,6 +35,8 @@ public:
     bool getRandom();
     void setRandom(bool randomness);
     void setSeed(int newSeed);
+    int getDropsWithoutClear();
+    void setDropsWithoutClear(int drops);
     string getInputFile();
     void setInputFile(string input);
     bool getHeavy();
