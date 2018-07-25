@@ -22,6 +22,9 @@ void Interpreter::startGame() {
     board->setLevel(startLevel);
     display = make_shared<Display>(graphicsDisplay, board);
     board->getNextBlock();
+    board->getCurrentBlock()->down();
+    board->getCurrentBlock()->down();
+    board->getCurrentBlock()->down();
 
     string nextCommand;
     display->print(true, '-');   //TODO: display->print(false, ' ')
@@ -50,13 +53,21 @@ void Interpreter::startGame() {
                 executeCommand("down");
             }
 
-            if(!board->getCurrentBlock()) board->getNextBlock();
+            if(!board->getCurrentBlock()) {
+                board->getNextBlock();
+                board->getCurrentBlock()->down();
+                board->getCurrentBlock()->down();
+                board->getCurrentBlock()->down();
+                if (checkIfLost()) {
+                    cout<<"AAA"<<endl;
+                    return;
+                }
+            }
 
             if(board->isBlockStuck()) {
                 cout<<"Block is stuck"<<endl;
-                if(board->isLost()) {
-                    cout << "Game Over" <<endl;
-                    display->print(true, '-');   //TODO: display->print(false, ' ')
+                if (checkIfLost()) {
+                    cout<<"BBB"<<endl;
                     return;
                 }
 
@@ -67,11 +78,27 @@ void Interpreter::startGame() {
                     }
                 }
                 board->getNextBlock();
+                board->getCurrentBlock()->down();
+                board->getCurrentBlock()->down();
+                board->getCurrentBlock()->down();
+                if (checkIfLost()) {
+                    cout<<"CCC"<<endl;
+                    return;
+                }
             }
         }
 
         display->print(true, '-');   //TODO: display->print(false, ' ')
     }
+}
+
+bool Interpreter::checkIfLost() {
+    if(board->isLost()) {
+        cout << "Game Over" <<endl;
+        display->print(true, '-');   //TODO: display->print(false, ' ')
+        return true;
+    }
+    return false;
 }
 
 
