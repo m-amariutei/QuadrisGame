@@ -10,18 +10,18 @@ using namespace std;
 
 class QuadrisBoard;
 
-class Display {
+class DisplayType {
 	bool graphics;
 	shared_ptr<QuadrisBoard> quadrisboard;
 
 public:
-    Display(bool newGraphics, shared_ptr<QuadrisBoard> newBoard);
+    DisplayType(bool newGraphics, shared_ptr<QuadrisBoard> newBoard);
     //~Display();
 
     bool getGraphics();
     void setGraphics(bool newGraphics);
 
-    void print(bool showHidden = true, char empty = ' ');
+    void printT(bool showHidden = true, char empty = ' ');
 };
 
 #endif

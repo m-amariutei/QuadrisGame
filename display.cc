@@ -1,24 +1,25 @@
 #include "display.h"
 
-Display::Display(bool newGraphics, shared_ptr<QuadrisBoard> newBoard) {
+DisplayType::DisplayType(bool newGraphics, shared_ptr<QuadrisBoard> newBoard) {
 	graphics = newGraphics;
 	quadrisboard = newBoard;
 }
 
-bool Display::getGraphics() {
+bool DisplayType::getGraphics() {
 	return graphics;
 }
 
-void Display::setGraphics(bool newGraphics) {
+void DisplayType::setGraphics(bool newGraphics) {
 	newGraphics = graphics;
 }
 
-void Display::print(bool showHidden, char empty) {
+void DisplayType::printT(bool showHidden, char empty) {
 	if(graphics) {
-		quadrisboard->print(showHidden, empty);
-		//TODO: graphics
+
+		quadrisboard->printText(showHidden, empty);
 
 	} else {
-		quadrisboard->print(showHidden, empty);
+
+		quadrisboard->printGraphic(showHidden);
 	}
 }

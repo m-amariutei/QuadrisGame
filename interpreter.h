@@ -11,12 +11,12 @@
 
 using namespace std;
 
-class Display;
+class DisplayType;
 class QuadrisBoard;
 
 class Interpreter {
 
-    shared_ptr<Display> display;
+    shared_ptr<DisplayType> display;
     shared_ptr<QuadrisBoard> board;
     string currentCommand;
     bool graphicsDisplay;

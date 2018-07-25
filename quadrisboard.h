@@ -10,6 +10,7 @@
 #include "level.h"
 #include "constants.h"
 #include "block.h"
+#include "window.h"
 
 
 using namespace std;
@@ -50,7 +51,9 @@ public:
 
     void initialize();
     bool isLost();
-    void print(bool seeInvisible = true, char empty = ' ');
+    void printText(bool seeInvisible = true, char empty = ' ');
+    int getColour(char bType);
+    void printGraphic(bool seeInvisible = true);
     void executeCommand(string name);
     bool isFullRow(int rowIndex);
     void clearRow(int rowIndex);

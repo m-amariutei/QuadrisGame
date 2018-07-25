@@ -73,7 +73,7 @@ bool QuadrisBoard::isLost() {
 	return false;
 }
 
-void QuadrisBoard::print(bool seeInvisible, char empty) {
+void QuadrisBoard::printText(bool seeInvisible, char empty) {
 
 	cout << "Level:         " << level->getLevel() << endl;
 	cout << "Score:         " << score << endl;
@@ -104,6 +104,57 @@ void QuadrisBoard::print(bool seeInvisible, char empty) {
 	cout << "Next Block: " << nextBlock << endl;
 	//print next piece coming
 }
+
+int QuadrisBoard::getColour(char bType) {
+	if (bType == 'I') {
+		return Xwindow::Cyan;
+	} else if (bType == 'J') {
+		return Xwindow::Blue;
+	} else if (bType == 'L') {
+		return Xwindow::Orange;
+	} else if (bType == 'O') {
+		return Xwindow::Yellow;
+	} else if (bType == 'S') {
+		return Xwindow::Green;
+	} else if (bType == 'Z') {
+		return Xwindow::Red;
+	} else if (bType == 'T') {
+		return Xwindow::Magenta;
+	} else if (bType == '*') {
+		return Xwindow::Brown;
+	} else if (bType == '?'){
+		Xwindow::Black;
+	}
+}
+
+void QuadrisBoard::printGraphic(bool seeInvisible) {
+	int begRow = NUM_ROWS_INVISIBLE;
+	if(seeInvisible) begRow = 0;
+
+	for (int i = begRow; i < HEIGHT; i++) {
+
+		for(int j = 0; j < WIDTH; j++) {
+
+			auto xw = Xwindow();
+			auto block = board.at(i).at(j)->getBlock();
+			int colour = Xwindow::Black;
+			int x = board.at(i).at(j)->getXValue();
+			int y = board.at(i).at(j)->getYValue();
+			int xMargin = 25;
+			int yMargin = 25;
+
+			if(block != nullptr) {
+				colour = getColour(block->getType());
+			} else {
+				colour = Xwindow::White;
+			}
+			xw.fillRectangle(xMargin + 30*x, yMargin + 30*y, 29, 29, colour);
+
+		}
+
+	}
+}
+
 
 void QuadrisBoard::executeCommand(string name) {
 	//TODO

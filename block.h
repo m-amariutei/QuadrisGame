@@ -10,9 +10,6 @@
 
 using namespace std;
 
-enum BlockType {
-    Iblock, Jblock, Lblock, Oblock, Sblock, Tblock, Zblock, Single
-};
 
 class Cell;
 class QuadrisBoard;
@@ -28,28 +25,34 @@ public:
     Block(vector<shared_ptr<Cell>> cells, char type, int level);
 
     vector<shared_ptr<Cell>> getCells();
+
     void setCells(vector<shared_ptr<Cell>> newCells);
 
     int getLevelInitialized();
+
     void setLevelInitialized(int level);
 
     char getType();
+
     void setType(char newType);
 
     bool right();
+
     bool left();
+
     void drop();
+
     bool down();
+
     bool clockwise();
+
     bool counter();
+
     bool rotate(vector<int> values);
-    pair<int,int> getMinMaxElements(bool isX);
+
+    pair<int, int> getMinMaxElements(bool isX);
 
     bool hasNoCells();
-
-    //virtual shared_ptr<Block> create(BlockType bType) = 0;
-
 };
-
 
 #endif
