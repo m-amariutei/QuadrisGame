@@ -278,7 +278,7 @@ void QuadrisBoard::getNextBlock() {
         //type =
     }
 
-	cout<<type<<endl;
+	cout<<"getNextBlock: "<<type<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
 
 	//figure out cells

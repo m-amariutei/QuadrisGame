@@ -78,7 +78,7 @@ void Interpreter::startGame() {
             cout<<"Trying to execute command: "<<fullCommand<<endl;
 
             while (multiplier > 0) {
-
+                cout<<"multiplier: "<<multiplier<<endl;
                 bool successMove = executeCommand(fullCommand);
                 if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
                     executeCommand("down");
@@ -109,14 +109,12 @@ void Interpreter::startGame() {
                         }
                     }
                     board->getNextBlock();
-                }
-
-                board->getNextBlock();
-                board->getCurrentBlock()->down();
-                board->getCurrentBlock()->down();
-                board->getCurrentBlock()->down();
-                if (checkIfLost()) {
-                    return;
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    if (checkIfLost()) {
+                        return;
+                    }
                 }
 
                 multiplier--;
