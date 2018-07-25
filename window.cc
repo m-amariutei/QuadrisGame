@@ -69,6 +69,7 @@ Xwindow::Xwindow(int width, int height): width(width), height(height) {
         // 100*1000 is extra safe, but delay is noticeable
         // sleep(1) (which is equivalent to usleep(1000*1000)) for maximum stability (but slow)
         usleep(50*1000);
+        cout<<"line 72"<<endl;
 }
 
 Xwindow::~Xwindow() {

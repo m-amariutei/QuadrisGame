@@ -2,16 +2,25 @@
 
 shared_ptr<QuadrisBoard> QuadrisBoard::instance = 0;
 
-shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
+shared_ptr<QuadrisBoard> QuadrisBoard::getInstance(bool graphics) {
+	cout<<"line9"<<endl;
 	if (instance == 0) {
-		static shared_ptr<QuadrisBoard> newBoard(new QuadrisBoard);
+		//static shared_ptr<QuadrisBoard> newBoard;
+		static shared_ptr<QuadrisBoard> newBoard(new QuadrisBoard(new Xwindow));
+		if(graphics) {
+			cout<<"line9"<<endl;
+			//static shared_ptr<QuadrisBoard> newBoard(new QuadrisBoard(new Xwindow));
+			cout<<"line11"<<endl;
+		} else {
+			//static shared_ptr<QuadrisBoard> newBoard(new QuadrisBoard(NULL));
+		}
 		instance = newBoard;
 	}
 	return instance;
 
 }
 
-QuadrisBoard::QuadrisBoard() {
+QuadrisBoard::QuadrisBoard(Xwindow* xwindow) : xw{xwindow} {
 	initialize();
 }
 
