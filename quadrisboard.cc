@@ -267,7 +267,15 @@ void QuadrisBoard::replaceBlock(string blockType) {
 }
 
 void QuadrisBoard::getNextBlock() {
-	char type = level->getNextBlockType();
+
+    char type;
+
+    if (level !=  0) {
+        type = level->getNextBlockType();
+    } else {
+        //type =
+    }
+
 	cout<<type<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
 

@@ -17,11 +17,4 @@ add_executable(
         window.h window.cc
         interpreter.cc interpreter.h
         display.h display.cc
-        BlockClasses/Iblock.h BlockClasses/Iblock.cc
-        BlockClasses/Jblock.h BlockClasses/Jblock.cc
-        BlockClasses/Lblock.h BlockClasses/Lblock.cc
-        BlockClasses/Oblock.h BlockClasses/Oblock.cc
-        BlockClasses/Sblock.h BlockClasses/Sblock.cc
-        BlockClasses/Tblock.h BlockClasses/Tblock.cc
-        BlockClasses/Zblock.h BlockClasses/Zblock.cc
         )

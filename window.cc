@@ -94,7 +94,7 @@ void Xwindow::drawBigString(int x, int y, string msg, int colour) {
     ti.chars = const_cast<char*>(msg.c_str());
     ti.nchars = msg.length();
     ti.delta = 0;
-    //ti.font = f; // THIS DOES NOT COMPILE ?????
+    ti.font = f->fid;
     XDrawText(d, w, gc, x, y, &ti, 1);
     XSetForeground(d, gc, colours[Black]);
     XFlush(d);
