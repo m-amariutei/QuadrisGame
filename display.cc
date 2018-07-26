@@ -14,11 +14,8 @@ void Display::setGraphics(bool newGraphics) {
 }
 
 void Display::print(bool showHidden, char empty) {
-	if(graphics) {
-		quadrisboard->print(showHidden, empty);
-		//TODO: graphics
 
-	} else {
-		quadrisboard->print(showHidden, empty);
-	}
+	quadrisboard->print(showHidden, empty);
+	//TODO: graphics
 }
+

@@ -4,45 +4,57 @@ Block::Block(vector<shared_ptr<Cell>> cells, char type, int level): cells{cells}
     board = QuadrisBoard::getInstance();
 }
 
-vector<shared_ptr<Cell>> Block::getCells() { return cells; }
+vector<shared_ptr<Cell>> Block::getCells() {
+    return cells;
+}
 
-void Block::setCells(vector<shared_ptr<Cell>> newCells) { cells = newCells; }
+void Block::setCells(vector<shared_ptr<Cell>> newCells) {
+    cells = newCells;
+}
 
-int Block::getLevelInitialized() { return levelInitialized; }
+int Block::getLevelInitialized() {
+    return levelInitialized;
+}
 void Block::setLevelInitialized(int level) { levelInitialized = level; }
 
-char Block::getType() { return type; }
+char Block::getType() {
+    return type;
+}
 
 void Block::setType(char newType) { type = newType; }
 
 bool Block::right() {
-    //create coords
+
+    // Create coordinates
     vector<pair<int,int>> coords;
-    for(int i=0; i<cells.size(); i++) {
+    for (int i=0; i<cells.size(); i++) {
         coords.push_back(make_pair(cells.at(i)->getYValue(), cells.at(i)->getXValue() + 1));       //row, col
     }
     
-    //validate coords
+    // Validate coords
     bool isValid = board->validateCoord(coords);
 
-    //move block to coords
-    if(isValid) {
+    // Move block to coords
+    if (isValid) {
         board->moveBlock(coords);
         return true;
-    } else return false;
+    } else {
+        return false;
+    }
 }
 
 bool Block::left() {
-     //create coords
+
+     // Create coords
     vector<pair<int,int>> coords;
-    for(int i=0; i<cells.size(); i++) {
+    for (int i = 0; i < cells.size(); i++) {
         coords.push_back(make_pair(cells.at(i)->getYValue(), cells.at(i)->getXValue() - 1));       //row, col
     }
     
-    //validate coords
+    // Validate coords
     bool isValid = board->validateCoord(coords);
 
-    //move block to coords
+    // Move block to coords
     if(isValid) {
         board->moveBlock(coords);
         return true;
@@ -50,18 +62,19 @@ bool Block::left() {
 }
 
 bool Block::down() {
-    //should always work (if not, generate new block)
 
-    //create coords
+    // This should always work (if not, generate new block)
+
+    // Create coords
     vector<pair<int,int>> coords;
     for(int i=0; i<cells.size(); i++) {
         coords.push_back(make_pair(cells.at(i)->getYValue() + 1, cells.at(i)->getXValue()));       //row, col
     }
     
-    //validate coords
+    // Validate coords
     bool isValid = board->validateCoord(coords);
 
-    //move block to coords
+    // Move block to coords
     if(isValid) {
         board->moveBlock(coords);
         return true;
@@ -72,14 +85,16 @@ bool Block::down() {
 }
 
 void Block::drop() {
-    //should always work (if not, generate new block)
+    // This should always work (if not, generate new block)
     while(down());
     
 }
 
 bool Block::rotate(vector<int> values) {
+
     vector<pair<int,int>> coords;
-    for (int i=0; i<cells.size(); i++) {
+    for (int i = 0; i < cells.size(); i++) {
+
         int xVal = cells.at(i)->getXValue();
         int yVal = cells.at(i)->getYValue();
         pair<int,int> newCoord = make_pair(xVal - values[0] + values[1], values[2] + values[3] - yVal);
@@ -99,16 +114,16 @@ bool Block::rotate(vector<int> values) {
 }
 
 pair<int,int> Block::getMinMaxElements(bool isX) {
-    if(isX) {
+    if (isX) {
         vector<int> xs;
-        for (int i=0; i<cells.size(); i++) {
+        for (int i = 0; i < cells.size(); i++) {
             xs.push_back(cells.at(i)->getXValue());
         }
         auto result =  minmax_element(xs.begin(), xs.end());
         return make_pair(*result.first,*result.second);
     } else {
         vector<int> ys;
-        for (int i=0; i<cells.size(); i++) {
+        for (int i=0; i < cells.size(); i++) {
             ys.push_back(cells.at(i)->getYValue());
         }
         auto result = minmax_element(ys.begin(), ys.end());

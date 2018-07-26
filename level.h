@@ -49,7 +49,6 @@ public:
     ~Level();
 
 protected:
-    char level0Block();
     char otherLevelBlock();
 };
 

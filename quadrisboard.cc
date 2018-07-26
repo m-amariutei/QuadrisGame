@@ -73,34 +73,8 @@ bool QuadrisBoard::isLost() {
 
 void QuadrisBoard::print(bool seeInvisible, char empty) {
 
-	cout << "Level:         " << level->getLevel() << endl;
-	cout << "Score:         " << score << endl;
-	cout << "High Score:      " << highScore << endl;
-	cout << "----------------" << endl;
+	cout << *this;
 
-	int begRow = NUM_ROWS_INVISIBLE;
-	if(seeInvisible) begRow = 0;
-
-	for (int i = begRow; i < HEIGHT; i++) {
-
-		for(int j = 0; j < WIDTH; j++) {
-
-			auto block = board.at(i).at(j)->getBlock();
-
-			if(block != nullptr) {
-				cout<< block->getType();
-			} else {
-				cout<<empty;
-			}
-			
-		}
-		cout<<endl;
-		if(i==NUM_ROWS_INVISIBLE-1) cout << "++++++++++++++++" << endl;
-	}
-
-	cout << "----------------" << endl;
-	cout << "Next Block: " << nextBlock << endl;
-	//print next piece coming
 }
 
 bool QuadrisBoard::isFullRow(int rowIndex) {
@@ -146,7 +120,6 @@ void QuadrisBoard::clearRow(int rowIndex) {
 			cerr << "quadrisboard.cc/clearRow: we deleted row " << rowIndex << "but failed to clear block->cells.at(" << i << ")" <<endl;
 	}
 
-	dropsWithoutClear = 0;
 	dropRowsAbove(rowIndex);
 }
 
@@ -321,7 +294,8 @@ void QuadrisBoard::getNextBlock() {
     nextType = level->getNextBlockType();
 
         if (nextType == '0') {
-            print(true, '-');
+        	cout << *this;
+            //print(true, '-');
             cout << "You have reached the end of the script file! Play at level 1 for more pieces" << endl;
             exit(0);
         }
@@ -460,3 +434,36 @@ void QuadrisBoard::setLevel(shared_ptr<Level> newLevel) {
 	level = newLevel;
 
 }
+
+std::ostream &operator<<(std::ostream &out, const QuadrisBoard &qb) {
+
+	cout << "Level:         " << qb.level->getLevel() << endl;
+	cout << "Score:         " << qb.score << endl;
+	cout << "High Score:    " << qb.highScore << endl;
+	cout << "----------------" << endl;
+
+	int begRow = NUM_ROWS_INVISIBLE;
+	begRow = 0;
+
+	for (int i = begRow; i < HEIGHT; i++) {
+
+		for(int j = 0; j < WIDTH; j++) {
+
+			auto block = qb.board.at(i).at(j)->getBlock();
+
+			if(block != nullptr) {
+				cout<< block->getType();
+			} else {
+				cout << '-';
+			}
+
+		}
+		cout<<endl;
+		if(i==NUM_ROWS_INVISIBLE-1) cout << "++++++++++++++++" << endl;
+	}
+
+	cout << "----------------" << endl;
+	cout << "Next Block: " << qb.nextBlock << endl;
+	//print next piece coming
+}
+

@@ -24,7 +24,6 @@ class QuadrisBoard {
     static shared_ptr<QuadrisBoard>instance;
     QuadrisBoard();
 
-
     vector<vector<shared_ptr<Cell>>> board;
     shared_ptr<Block> currentBlock;
     char nextBlock;
@@ -34,7 +33,6 @@ class QuadrisBoard {
 
     int score;
     int highScore;
-    int dropsWithoutClear;
 
 public:
 
@@ -43,12 +41,18 @@ public:
     vector<vector<shared_ptr<Cell>>> getBoard();
     void setBoard(vector<vector<shared_ptr<Cell>>> newBoard);
 
-    shared_ptr<Level> getLevel();
+
     void setLevels(shared_ptr<Level> newLevels);
 
     void setNextBlock(char block);
 
     shared_ptr<Block> getCurrentBlock();
+
+    shared_ptr<Level> getLevel();
+    void setLevel(shared_ptr<Level> level);
+
+    void getNextBlock();
+    void setNextBlock();
 
     void initialize();
     bool isLost();
@@ -65,18 +69,15 @@ public:
     void replaceBlock(string blockType);
     void addToScore(int newScore);
     void checkClearedBlocks();
-    void setNextBlock();
 
     void levelUp();
     void levelDown();
     void restart();
     void hint();
-    void random();
-    void norandom();
     bool validateCoord(vector<pair<int,int>> coordToCheck);
-    void getNextBlock();
-    void setLevel(shared_ptr<Level> level);
     void moveBlock(vector<pair<int,int>> coordToCheck);
+
+    friend std::ostream &operator<<(std::ostream &out, const QuadrisBoard &qb);
 };
 
 #endif

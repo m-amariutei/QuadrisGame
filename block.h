@@ -47,8 +47,6 @@ public:
 
     bool hasNoCells();
 
-    //virtual shared_ptr<Block> create(BlockType bType) = 0;
-
 };
 
 
