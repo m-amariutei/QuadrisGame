@@ -3,6 +3,7 @@
 shared_ptr<QuadrisBoard> QuadrisBoard::instance = 0;
 
 shared_ptr<QuadrisBoard> QuadrisBoard::getInstance(bool graphics) {
+
 	if (instance == 0) {
 		//static shared_ptr<QuadrisBoard> newBoard;
 		static shared_ptr<QuadrisBoard> newBoard(new QuadrisBoard(graphics));
@@ -43,8 +44,6 @@ void QuadrisBoard::initialize() {
 
 		for (int j = 0; j < WIDTH; j++) {
 
-			//Cell* cell = new Cell; need manual destroy ....not anymore
-
 			shared_ptr<Cell> cell = make_shared<Cell>(j,i, nullptr);
 			board.at(i).push_back(cell);
 		}
@@ -54,6 +53,7 @@ void QuadrisBoard::initialize() {
 	nextBlock = ' ';
 	score = 0;
 	highScore = 0;
+
 	xw = NULL;
 }
 
@@ -189,8 +189,11 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 }
 
 bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
+
 	for (vector<shared_ptr<Cell>>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
+
 		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
+
 			block->getCells().erase(it);
 			return true;
 		}
@@ -202,7 +205,9 @@ bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
 void QuadrisBoard::clearRow(int rowIndex) {
 
 	if (rowIndex >= HEIGHT) cerr << "QuadrisBoard::clearRow: rowIndex >= HEIGHT" <<endl;
-	if (!isFullRow(rowIndex)) cerr << "uadrisboard.cc/clearRow: called on non-full row" <<endl;
+
+	if (!isFullRow(rowIndex)) cerr << "Quadrisboard.cc/clearRow: called on non-full row" <<endl;
+
 	for (int i = 0; i < WIDTH; i++) {
 		//let both cell and block know about this
 		shared_ptr<Cell> cell = board.at(rowIndex).at(i);
@@ -212,9 +217,11 @@ void QuadrisBoard::clearRow(int rowIndex) {
 		cell->setBlock(nullptr);
 		bool wasDeletedSuccessfully = false;
 		wasDeletedSuccessfully = deleteCellFromBlock(block, cell->getXValue(), cell->getYValue());
-		if (!wasDeletedSuccessfully) cerr << "quadrisboard.cc/clearRow: we deleted row " << rowIndex << "but failed to clear block->cells.at(" << i << ")" <<endl;
+		if (!wasDeletedSuccessfully)
+			cerr << "quadrisboard.cc/clearRow: we deleted row " << rowIndex << "but failed to clear block->cells.at(" << i << ")" <<endl;
 	}
 
+	dropsWithoutClear = 0;
 	dropRowsAbove(rowIndex);
 }
 
@@ -281,14 +288,8 @@ bool QuadrisBoard::cellBelowIsSticky(shared_ptr<Block> block, int x, int y) {
 	}
 }
 
-/*
-Interpreter * QuadrisBoard::patternMatchName(string name) {
-	//TODO
-	return NULL;
-}
-*/
-
 void QuadrisBoard::levelUp() {
+
     int levelInt = level->getLevel();
     if(levelInt > LEVEL_MAX) {
         cerr << "Level setting is wrong. Level is too high." << endl;
@@ -305,6 +306,7 @@ void QuadrisBoard::levelUp() {
 }
 
 void QuadrisBoard::levelDown() {
+
     int levelInt = level->getLevel();
     if(levelInt < LEVEL_MIN) {
         cerr << "Level setting is wrong. Level is too low." << endl;
@@ -321,12 +323,14 @@ void QuadrisBoard::levelDown() {
 }
 
 void QuadrisBoard::restart() {
-	cout << "were trying our best to restart" << endl;
+
     //wipe cells content
     for(int i=0; i<HEIGHT; i++) {
         for(int j=0; j<WIDTH; j++) {
+
             shared_ptr<Cell> cell = board.at(i).at(j);
             shared_ptr<Block> block = cell->getBlock();
+
             if(block != nullptr) {
                 cell->setBlock(nullptr);
             }
@@ -338,6 +342,7 @@ void QuadrisBoard::restart() {
     //wipe board content
     currentBlock = nullptr;
     score = 0;
+    level->setDropsWithoutClear(0);
     nextBlock = level->getNextBlockType();
 }
 
@@ -346,8 +351,9 @@ void QuadrisBoard::hint() {
 }
 
 bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
+
 	for(int i=0; i<coordToCheck.size(); i++) {
-		//cout<<"("<<coordToCheck.at(i).first<<","<<coordToCheck.at(i).second<<")"<<endl;
+
 		if(coordToCheck.at(i).first < 0 || coordToCheck.at(i).first >= HEIGHT ||
 			coordToCheck.at(i).second < 0 || coordToCheck.at(i).second >= WIDTH ||
 			(board.at(coordToCheck.at(i).first).at(coordToCheck.at(i).second)->getBlock() != nullptr) &&
@@ -371,6 +377,19 @@ void QuadrisBoard::replaceBlock(string blockType) {
 
 void QuadrisBoard::getNextBlock() {
 
+	int dropsNoClear = level->getDropsWithoutClear();
+
+	if(level->getLevel() == 4 && dropsNoClear > 0 && dropsNoClear % 5 == 0) {
+
+		vector<shared_ptr<Cell>> cells;
+		cells.push_back(board.at(0).at(5));
+		shared_ptr<Block> starBlock = make_shared<Block>(cells,'*',level->getLevel());
+		board.at(0).at(5)->setBlock(starBlock);
+		//drop it
+		currentBlock = starBlock;
+		starBlock->drop();
+	}
+
     char type = nextBlock;
     char nextType;
 
@@ -382,14 +401,11 @@ void QuadrisBoard::getNextBlock() {
             exit(0);
         }
 
-
-
-	//cout<<"getNextBlock type: "<<nextType<<endl;
 	vector<shared_ptr<Cell>> cellsForBlock;
 
 	nextBlock = nextType;
 
-	//figure out cells
+	// Initialize sells
     if(type == 'I') {
         cellsForBlock.push_back(board.at(0).at(0));
         cellsForBlock.push_back(board.at(1).at(0));

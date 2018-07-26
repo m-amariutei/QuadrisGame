@@ -36,7 +36,7 @@ class QuadrisBoard {
 
     int score;
     int highScore;
-
+    int dropsWithoutClear;
 
 public:
     ~QuadrisBoard();
@@ -54,10 +54,12 @@ public:
 
     void initialize();
     bool isLost();
+
     void printText(bool seeInvisible = true, char empty = ' ');
     int getColour(char bType);
     void printGraphic(bool seeInvisible = true);
     void executeCommand(string name);
+
     bool isFullRow(int rowIndex);
     void clearRow(int rowIndex);
     void dropRowsAbove(int rowIndex);
@@ -66,14 +68,12 @@ public:
     bool isBlockStuck(shared_ptr<Block>);
     bool deleteCellFromBlock(shared_ptr<Block>, int, int);
     bool cellBelowIsSticky(shared_ptr<Block>, int, int);
-    //Interpreter *patternMatchName(string name); //......add shared ptr
 
     void replaceBlock(string blockType);
     void addToScore(int newScore);
     void checkClearedBlocks();
     void setNextBlock();
 
-    //~QuadrisBoard();
     void levelUp();
     void levelDown();
     void restart();

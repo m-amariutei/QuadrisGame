@@ -64,7 +64,8 @@ char Level::otherLevelBlock() {
         probabilities = LEVEL3;
     }
 
-    srand(time( NULL ));
+    //srand(time( NULL ));
+
     int random = rand() % max;
     max--;
 
@@ -94,6 +95,13 @@ bool Level::getRandom() { return random; }
 void Level::setRandom(bool randomness) { random = randomness; }
 
 void Level::setSeed(int newSeed) { seed = newSeed; }
+
+int Level::getDropsWithoutClear() {
+    return dropsWithoutClear;
+}
+void Level::setDropsWithoutClear(int drops) {
+    dropsWithoutClear = drops;
+}
 
 string Level::getInputFile() {return inputFile; }
 
