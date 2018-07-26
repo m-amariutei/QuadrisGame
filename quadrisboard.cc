@@ -12,6 +12,13 @@ shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
 
 }
 
+void printCoords(vector<pair<int,int>> coords) {
+	cout<<"Printing coords"<<endl;
+	for(int i=0; i<coords.size(); i++) {
+		cout<<"("<<coords.at(i).first<<","<<coords.at(i).second<<")"<<endl;
+	}
+}
+
 QuadrisBoard::QuadrisBoard() {
 	initialize();
 }
@@ -289,50 +296,87 @@ bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
 	return true;
 }
 
-void QuadrisBoard::replaceBlock(string blockType) {
+bool QuadrisBoard::replaceBlock(string blockType) {
 	char newType = blockType.at(0);
-	if(currentBlock->getType == newType) return;
+	if(currentBlock->getType() == newType) return false;
 
+	cout<<"FIniding leftLow"<<endl;
 	pair<int,int> leftLow = make_pair(0,0);	//row, col
 	for(int i=0; i<currentBlock->getCells().size(); i++) {
-		int row = currentBlock->getCells().at(i).getYValue();
-		int col = currentBlock->getCells().at(i).getXValue();
-		if(row <= leftLow.first) {
+		int row = currentBlock->getCells().at(i)->getYValue();
+		int col = currentBlock->getCells().at(i)->getXValue();
+		cout<<"row,col: "<<row<<","<<col<<endl;
+		if(row >= leftLow.first) {
 			if(col <= leftLow.second) {
 				leftLow = make_pair(row,col);
 			}
-		} else if (row < leftLow.first) {
+		} 
+		if (row > leftLow.first) {
 			leftLow = make_pair(row,col);
 		}
 
-		currentBlock->getCells().at(i)->setBlock(nullptr);
+		//currentBlock->getCells().at(i)->setBlock(nullptr);
 	}
+
+	cout<<leftLow.first<<","<<leftLow.second<<endl;
+
+	vector<pair<int,int>> coords;	//row, col
+	int row, col;
+	row = leftLow.first;
+	col = leftLow.second;
+	coords.push_back(make_pair(row, col));
 
 	if(newType == 'I') {
-		vector<shared_ptr<Cell>> cellsForBlock;
-		// cellsForBlock.push_back(board.at(0).at(0));
-		currentBlock = make_shared<Block>(cellsForBlock, type);
-		// board.at(0).at(0)->setBlock(currentBlock);
-
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-2, col));
+		coords.push_back(make_pair(row-3, col));
 	} else if(newType == 'J') {
-
-	} else if(newType == 'I') {
-
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
+		coords.push_back(make_pair(row-2, col+1));
 	} else if(newType == 'L') {
-
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-2, col));
+		coords.push_back(make_pair(row, col+1));
 	} else if(newType == 'O') {
-
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
 	} else if(newType == 'S') {
-
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
+		coords.push_back(make_pair(row-1, col+2));
 	} else if(newType == 'T') {
-
+		coords.push_back(make_pair(row-1, col-1));
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-1, col+1));
 	} else if(newType == 'Z') {
-
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-1, col-1));
 	} else {
 		cerr << "replaceBlock with invalid type " << newType <<endl;
-		return;
+		return false;
 	}
 
+	printCoords(coords);
+
+	if (validateCoord(coords)) {
+		cout<<"Coords are OK"<<endl;
+		vector<shared_ptr<Cell>> cellsForBlock;
+		for(int i=0; i<coords.size(); i++) {
+			cellsForBlock.push_back(board.at(coords.at(i).first).at(coords.at(i).second));
+		}
+		for(int i=0; i<currentBlock->getCells().size(); i++) {
+			currentBlock->getCells().at(i)->setBlock(nullptr);
+		}
+		currentBlock = make_shared<Block>(cellsForBlock, newType, level->getLevel());
+		for(int i=0; i<coords.size(); i++) {
+			board.at(coords.at(i).first).at(coords.at(i).second)->setBlock(currentBlock);
+		}
+		return true;
+	}
+	return false;
 }
 
  void QuadrisBoard::addToScore(int newScore) {
@@ -466,7 +510,8 @@ void QuadrisBoard::getNextBlock() {
 }
 
 void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {
-	for(int i = currentBlock->getCells().size()-1; i>=0; i--) {
+	//printCoords(coords);
+	for(int i=currentBlock->getCells().size()-1; i>=0; i--) {
 		currentBlock->getCells().at(i)->setBlock(nullptr);
 		currentBlock->getCells().pop_back();
 	}
