@@ -70,8 +70,35 @@ void Interpreter::startGame() {
         if (nextCommand.length() <= 1 && isBlockName(nextCommand)) {
 
             cout<<"Trying to replace block"<<endl;
-            board->replaceBlock(nextCommand);
+            bool replace = board->replaceBlock(nextCommand);
             //don't drop
+
+            /*
+            if(replace) {
+                if (board->isBlockStuck()) {
+                    cout << "Block is stuck" << endl;
+                    if (board->isLost()) {
+                        cout << "Game Over" << endl;
+                        display->print(true, '-');   //TODO: display->print(false, ' ')
+                        return;
+                    }
+
+                    for (int i = 0; i < HEIGHT; i++) {
+                        if (board->isFullRow(i)) {
+                            cout << "Row " << i << " is full" << endl;
+                            board->clearRow(i);
+                        }
+                    }
+                    board->getNextBlock();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    board->getCurrentBlock()->down();
+                    if (checkIfLost()) {
+                        return;
+                    }
+                }
+            }
+            */
         }
 
         else {
