@@ -66,9 +66,9 @@ public:
     bool deleteCellFromBlock(shared_ptr<Block>, int, int);
     bool cellBelowIsSticky(shared_ptr<Block>, int, int);
 
-    void replaceBlock(string blockType);
     void addToScore(int newScore);
     void checkClearedBlocks();
+    bool replaceBlock(string blockType);
 
     void levelUp();
     void levelDown();

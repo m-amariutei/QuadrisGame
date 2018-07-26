@@ -12,6 +12,13 @@ shared_ptr<QuadrisBoard> QuadrisBoard::getInstance() {
 
 }
 
+void printCoords(vector<pair<int,int>> coords) {
+	cout<<"Printing coords"<<endl;
+	for(int i=0; i<coords.size(); i++) {
+		cout<<"("<<coords.at(i).first<<","<<coords.at(i).second<<")"<<endl;
+	}
+}
+
 QuadrisBoard::QuadrisBoard() {
 	initialize();
 }
@@ -89,16 +96,18 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 
 bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
 
-	for (vector<shared_ptr<Cell>>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
+	vector<shared_ptr<Cell>> newCells;
+	bool eliminated = false;
 
-		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
-
-			block->getCells().erase(it);
-			return true;
+	for(int i=0; i<block->getCells().size(); i++) {
+		if(block->getCells().at(i)->getXValue() != x || block->getCells().at(i)->getYValue() != y) {
+			newCells.push_back(block->getCells().at(i));
+		} else {
+			eliminated = true;
 		}
 	}
 
-	return false;
+	return eliminated;
 }
 
 void QuadrisBoard::clearRow(int rowIndex) {
@@ -107,15 +116,17 @@ void QuadrisBoard::clearRow(int rowIndex) {
 
 	if (!isFullRow(rowIndex)) cerr << "Quadrisboard.cc/clearRow: called on non-full row" <<endl;
 
+	//cout<<"clearRow "<<rowIndex<<endl;
 	for (int i = 0; i < WIDTH; i++) {
+		//cout<<"cell "<<i<<endl;
 		//let both cell and block know about this
 		shared_ptr<Cell> cell = board.at(rowIndex).at(i);
 		shared_ptr<Block> block = cell->getBlock();
 		if (block == nullptr) cerr << "quadrisboard.cc/clearRow: block should not be NULL here" <<endl;
 
-		cell->setBlock(nullptr);
 		bool wasDeletedSuccessfully = false;
 		wasDeletedSuccessfully = deleteCellFromBlock(block, cell->getXValue(), cell->getYValue());
+		cell->setBlock(nullptr);
 		if (!wasDeletedSuccessfully)
 			cerr << "quadrisboard.cc/clearRow: we deleted row " << rowIndex << "but failed to clear block->cells.at(" << i << ")" <<endl;
 	}
@@ -137,6 +148,7 @@ void QuadrisBoard::dropRowsAbove(int rowIndex) {
 }
 
 void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
+	//cout<<"dropTop("<<rowIndex<<","<<colIndex<<")"<<endl;
 	if (rowIndex >= HEIGHT || rowIndex < LOST_ROW) {
 		cerr << "QuadrisBoard::dropTop: rowIndex is wrong" <<endl;
 	}
@@ -152,7 +164,7 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
 	shared_ptr<Block> blockTop = cellTop->getBlock();
 
-	if(rowIndex >= 16 && blockTop != nullptr) cout<<blockTop->getType()<<endl;
+	//if(blockTop != nullptr) cout<<blockTop->getType()<<endl;
 
 	cellDown->setBlock(blockTop);
 	cellTop->setBlock(nullptr);
@@ -262,9 +274,87 @@ bool QuadrisBoard::validateCoord(vector<pair<int,int>> coordToCheck) {	//row,col
 	return true;
 }
 
-void QuadrisBoard::replaceBlock(string blockType) {
-	//TODO
+bool QuadrisBoard::replaceBlock(string blockType) {
+	char newType = blockType.at(0);
+	if(currentBlock->getType() == newType) return false;
 
+	cout<<"FIniding leftLow"<<endl;
+	pair<int,int> leftLow = make_pair(0,0);	//row, col
+	for(int i=0; i<currentBlock->getCells().size(); i++) {
+		int row = currentBlock->getCells().at(i)->getYValue();
+		int col = currentBlock->getCells().at(i)->getXValue();
+		cout<<"row,col: "<<row<<","<<col<<endl;
+		if(row >= leftLow.first) {
+			if(col <= leftLow.second) {
+				leftLow = make_pair(row,col);
+			}
+		} 
+		if (row > leftLow.first) {
+			leftLow = make_pair(row,col);
+		}
+
+		//currentBlock->getCells().at(i)->setBlock(nullptr);
+	}
+
+	cout<<leftLow.first<<","<<leftLow.second<<endl;
+
+	vector<pair<int,int>> coords;	//row, col
+	int row, col;
+	row = leftLow.first;
+	col = leftLow.second;
+	coords.push_back(make_pair(row, col));
+
+	if(newType == 'I') {
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-2, col));
+		coords.push_back(make_pair(row-3, col));
+	} else if(newType == 'J') {
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
+		coords.push_back(make_pair(row-2, col+1));
+	} else if(newType == 'L') {
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-2, col));
+		coords.push_back(make_pair(row, col+1));
+	} else if(newType == 'O') {
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
+	} else if(newType == 'S') {
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col+1));
+		coords.push_back(make_pair(row-1, col+2));
+	} else if(newType == 'T') {
+		coords.push_back(make_pair(row-1, col-1));
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-1, col+1));
+	} else if(newType == 'Z') {
+		coords.push_back(make_pair(row, col+1));
+		coords.push_back(make_pair(row-1, col));
+		coords.push_back(make_pair(row-1, col-1));
+	} else {
+		cerr << "replaceBlock with invalid type " << newType <<endl;
+		return false;
+	}
+
+	printCoords(coords);
+
+	if (validateCoord(coords)) {
+		cout<<"Coords are OK"<<endl;
+		vector<shared_ptr<Cell>> cellsForBlock;
+		for(int i=0; i<coords.size(); i++) {
+			cellsForBlock.push_back(board.at(coords.at(i).first).at(coords.at(i).second));
+		}
+		for(int i=0; i<currentBlock->getCells().size(); i++) {
+			currentBlock->getCells().at(i)->setBlock(nullptr);
+		}
+		currentBlock = make_shared<Block>(cellsForBlock, newType, level->getLevel());
+		for(int i=0; i<coords.size(); i++) {
+			board.at(coords.at(i).first).at(coords.at(i).second)->setBlock(currentBlock);
+		}
+		return true;
+	}
+	return false;
 }
 
  void QuadrisBoard::addToScore(int newScore) {
@@ -399,7 +489,8 @@ void QuadrisBoard::getNextBlock() {
 }
 
 void QuadrisBoard::moveBlock(vector<pair<int,int>> coords) {
-	for(int i = currentBlock->getCells().size()-1; i>=0; i--) {
+	//printCoords(coords);
+	for(int i=currentBlock->getCells().size()-1; i>=0; i--) {
 		currentBlock->getCells().at(i)->setBlock(nullptr);
 		currentBlock->getCells().pop_back();
 	}
