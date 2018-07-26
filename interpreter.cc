@@ -21,12 +21,9 @@ void Interpreter::startGame() {
 
     board = QuadrisBoard::getInstance(graphicsDisplay);
 
-    //if(graphicsDisplay) {
-     //   cout<<"graphics"<<endl;
-     //   board->setXW();
-     //   cout<<"done2"<<endl;
-    //}
-    shared_ptr<Level> level = make_shared<Level>(startLevel, scriptFile);
+    shared_ptr<Level> level = Level::getInstance(startLevel, scriptFile);
+    level->setSeed(seed);
+
     board->setLevel(level);
 
     board->setNextBlock();
@@ -39,7 +36,7 @@ void Interpreter::startGame() {
     board->getCurrentBlock()->down();
 
     string nextCommand;
-    display->print(true, '-');   //TODO: display->print(false, ' ')
+    display->printT(true, '-');   //TODO: display->print(false, ' ')
 
     while (cin >> nextCommand) {
 
@@ -81,8 +78,21 @@ void Interpreter::startGame() {
 
             string fullCommand = interpretCommand(nextCommand);
 
+
             if (fullCommand == "") {
                 continue;
+            }
+
+            if (fullCommand == "norandom") {
+                string newScriptFile;
+                cin >> newScriptFile;
+                setScriptFile(newScriptFile);
+                level->setRandom(false);
+                level->setInputFile(newScriptFile);
+            }
+
+            if (fullCommand == "random") {
+                level->setRandom(true);
             }
 
             cout<<"Trying to execute command: "<<fullCommand<<endl;
@@ -93,6 +103,8 @@ void Interpreter::startGame() {
                 if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
                     executeCommand("down");
                 }
+
+                if (fullCommand == "drop" || !isMove(fullCommand)) {multiplier = 0;}
 
                 if(!board->getCurrentBlock()) {
                     board->getNextBlock();
@@ -107,8 +119,11 @@ void Interpreter::startGame() {
                 if (board->isBlockStuck()) {
                     cout << "Block is stuck" << endl;
                     if (board->isLost()) {
+                        display->printT(true, '-');   //TODO: display->print(false, ' ')
+
                         cout << "Game Over" << endl;
-                        display->print(true, '-');   //TODO: display->print(false, ' ')
+                        cout << "You have lost, please play again!" << endl;
+
                         return;
                     }
 
@@ -140,14 +155,14 @@ void Interpreter::startGame() {
             }
         }
 
-        display->print(true, '-');   //TODO: display->print(false, ' ')
+        display->printT(true, '-');   //TODO: display->print(false, ' ')
     }
 }
 
 bool Interpreter::checkIfLost() {
     if(board->isLost()) {
         cout << "Game Over" <<endl;
-        display->print(true, '-');   //TODO: display->print(false, ' ')
+        display->printT(true, '-');   //TODO: display->print(false, ' ')
         return true;
     }
     return false;
@@ -207,6 +222,10 @@ bool Interpreter::executeCommand(string nextCommand) {
         board->restart();
     } else if (nextCommand == "hint") {
         board->hint();
+    } else if (nextCommand == "random") {
+        board->setNextBlock();
+    } else if (nextCommand == "norandom") {
+        board->setNextBlock();
     } else {
         // world explosion???????
         cerr << "Interpreter::executeCommand: command not found" <<endl;

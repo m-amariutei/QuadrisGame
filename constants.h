@@ -13,8 +13,8 @@
 // Block Identifiers
 #define BLOCKS { 'I', 'J', 'L', 'O', 'S', 'T', 'Z' }
 // Possible Commands
-#define COMMANDS {"left", "right", "down", "clockwise", "counterclockwise", "drop", "levelup", "leveldown", "restart", "hint"}
-#define COMMANDS_SIZE 10
+#define COMMANDS {"left", "right", "down", "clockwise", "counterclockwise", "drop", "levelup", "leveldown", "restart", "hint", "random", "norandom"}
+#define COMMANDS_SIZE 12
 
 #define LEVEL_MIN 0
 #define LEVEL_MAX 4

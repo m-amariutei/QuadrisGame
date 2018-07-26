@@ -22,7 +22,7 @@ public:
     bool getGraphics();
     void setGraphics(bool newGraphics);
 
-    void print(bool showHidden = true, char empty = ' ');
+    void printT(bool showHidden = true, char empty = ' ');
 };
 
 #endif

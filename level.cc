@@ -1,18 +1,32 @@
 #include <iostream>
+#include <ctime>
 #include "level.h"
 
 using namespace std;
 
+shared_ptr<Level> Level::instance = 0;
+
+shared_ptr<Level> Level::getInstance(int level, string input) {
+    if (instance == 0) {
+        static shared_ptr<Level> newLevel(new Level(level, input));
+        instance = newLevel;
+    }
+    return instance;
+
+}
+
 Level::Level(int level, string input) : level{level}, inputFile{input} {
 
-    fileIn.open(inputFile.c_str());
+    if (!fileIn.is_open()) {
+        fileIn.open(inputFile.c_str());
+    }
     if(level >= 3) heavy = true;
     else heavy = false;
 }
 
 char Level::getNextBlockType() {
 
-    if (level == 0) {
+    if (level == 0 || ((level == 3 || level == 4) && random == false)) {
 
         char block;
 
@@ -20,7 +34,8 @@ char Level::getNextBlockType() {
             return block;
         } else {
             fileIn.close();
-            return 'D'; //Input file is done
+            return '0';
+
         }
 
         /// Check for invalid block type ///
@@ -49,6 +64,7 @@ char Level::otherLevelBlock() {
         probabilities = LEVEL3;
     }
 
+    srand(time( NULL ));
     int random = rand() % max;
     max--;
 
@@ -72,6 +88,21 @@ void Level::setLevel(int newLevel) {
     level = newLevel;
     if(level >=3) heavy = true;
     else heavy = false;
+}
+
+bool Level::getRandom() { return random; }
+void Level::setRandom(bool randomness) { random = randomness; }
+
+void Level::setSeed(int newSeed) { seed = newSeed; }
+
+string Level::getInputFile() {return inputFile; }
+
+void Level::setInputFile(string input) {
+    inputFile = input;
+    if (fileIn.is_open()) {
+        fileIn.close();
+    }
+    fileIn.open(inputFile.c_str());
 }
 
 bool Level::getHeavy() {
