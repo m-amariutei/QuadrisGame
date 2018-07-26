@@ -122,16 +122,18 @@ bool QuadrisBoard::isFullRow(int rowIndex) {
 
 bool QuadrisBoard::deleteCellFromBlock(shared_ptr<Block> block, int x, int y) {
 
-	for (vector<shared_ptr<Cell>>::const_iterator it = block->getCells().begin(); it != block->getCells().end(); it++) {
+	vector<shared_ptr<Cell>> newCells;
+	bool eliminated = false;
 
-		if ((*it)->getXValue() == x && (*it)->getYValue() == y) {
-
-			block->getCells().erase(it);
-			return true;
+	for(int i=0; i<block->getCells().size(); i++) {
+		if(block->getCells().at(i)->getXValue() != x || block->getCells().at(i)->getYValue() != y) {
+			newCells.push_back(block->getCells().at(i));
+		} else {
+			eliminated = true;
 		}
 	}
 
-	return false;
+	return eliminated;
 }
 
 void QuadrisBoard::clearRow(int rowIndex) {
@@ -140,15 +142,17 @@ void QuadrisBoard::clearRow(int rowIndex) {
 
 	if (!isFullRow(rowIndex)) cerr << "Quadrisboard.cc/clearRow: called on non-full row" <<endl;
 
+	//cout<<"clearRow "<<rowIndex<<endl;
 	for (int i = 0; i < WIDTH; i++) {
+		//cout<<"cell "<<i<<endl;
 		//let both cell and block know about this
 		shared_ptr<Cell> cell = board.at(rowIndex).at(i);
 		shared_ptr<Block> block = cell->getBlock();
 		if (block == nullptr) cerr << "quadrisboard.cc/clearRow: block should not be NULL here" <<endl;
 
-		cell->setBlock(nullptr);
 		bool wasDeletedSuccessfully = false;
 		wasDeletedSuccessfully = deleteCellFromBlock(block, cell->getXValue(), cell->getYValue());
+		cell->setBlock(nullptr);
 		if (!wasDeletedSuccessfully)
 			cerr << "quadrisboard.cc/clearRow: we deleted row " << rowIndex << "but failed to clear block->cells.at(" << i << ")" <<endl;
 	}
@@ -171,6 +175,7 @@ void QuadrisBoard::dropRowsAbove(int rowIndex) {
 }
 
 void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
+	//cout<<"dropTop("<<rowIndex<<","<<colIndex<<")"<<endl;
 	if (rowIndex >= HEIGHT || rowIndex < LOST_ROW) {
 		cerr << "QuadrisBoard::dropTop: rowIndex is wrong" <<endl;
 	}
@@ -186,7 +191,7 @@ void QuadrisBoard::dropTop(int rowIndex, int colIndex) {
 	shared_ptr<Cell> cellTop = board.at(rowIndex - 1).at(colIndex);
 	shared_ptr<Block> blockTop = cellTop->getBlock();
 
-	if(rowIndex >= 16 && blockTop != nullptr) cout<<blockTop->getType()<<endl;
+	//if(blockTop != nullptr) cout<<blockTop->getType()<<endl;
 
 	cellDown->setBlock(blockTop);
 	cellTop->setBlock(nullptr);
