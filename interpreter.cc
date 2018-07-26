@@ -17,6 +17,7 @@ Interpreter::Interpreter() : graphicsDisplay{true}, seed{0},
                              scriptFile{"sequence.txt"}, startLevel{0} {}
 
 void Interpreter::startGame() {
+
     cout << "startGame()" << endl;
 
     board = QuadrisBoard::getInstance(graphicsDisplay);
@@ -42,7 +43,6 @@ void Interpreter::startGame() {
 
     while (cin >> nextCommand) {
 
-        cout<<"Got command"<<endl;
         int multiplier = 1;
 
         if (47 < nextCommand[0] && nextCommand[0] < 58) {
@@ -63,9 +63,7 @@ void Interpreter::startGame() {
             // Remove numbers from command before trying to interpret
             int totalLen = nextCommand.length();
             nextCommand = nextCommand.substr(i, totalLen);
-
         }
-
 
         if (nextCommand.length() <= 1 && isBlockName(nextCommand)) {
 
@@ -107,7 +105,6 @@ void Interpreter::startGame() {
 
             string fullCommand = interpretCommand(nextCommand);
 
-
             if (fullCommand == "") {
                 continue;
             }
@@ -124,10 +121,8 @@ void Interpreter::startGame() {
                 level->setRandom(true);
             }
 
-            cout<<"Trying to execute command: "<<fullCommand<<endl;
-
             while (multiplier > 0) {
-                cout<<"multiplier: "<<multiplier<<endl;
+
                 bool successMove = executeCommand(fullCommand);
                 if (successMove && isMove(fullCommand) && board->getLevel()->getHeavy()) {
                     executeCommand("down");
@@ -146,7 +141,7 @@ void Interpreter::startGame() {
                 }
 
                 if (board->isBlockStuck()) {
-                    cout << "Block is stuck" << endl;
+
                     if (board->isLost()) {
                         display->printT(true, '-');   //TODO: display->print(false, ' ')
 
@@ -300,11 +295,6 @@ int Interpreter::getStartLevel() {
 void Interpreter::setStartLevel(int level) {
     startLevel = level;
 }
-
-void Interpreter::renameCommand() {
-
-}
-
 
 Interpreter::~Interpreter() {
 

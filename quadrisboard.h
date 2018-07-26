@@ -24,6 +24,7 @@ class QuadrisBoard {
 
     // Singleton design pattern
     static shared_ptr<QuadrisBoard>instance;
+
     QuadrisBoard(bool graphics = true);
     Xwindow *xw;
 
@@ -36,7 +37,6 @@ class QuadrisBoard {
 
     int score;
     int highScore;
-    int dropsWithoutClear;
 
 public:
     ~QuadrisBoard();
@@ -45,12 +45,18 @@ public:
     vector<vector<shared_ptr<Cell>>> getBoard();
     void setBoard(vector<vector<shared_ptr<Cell>>> newBoard);
 
-    shared_ptr<Level> getLevel();
+
     void setLevels(shared_ptr<Level> newLevels);
 
     void setNextBlock(char block);
 
     shared_ptr<Block> getCurrentBlock();
+
+    shared_ptr<Level> getLevel();
+    void setLevel(shared_ptr<Level> level);
+
+    void getNextBlock();
+    void setNextBlock();
 
     void initialize();
     bool isLost();
@@ -71,21 +77,20 @@ public:
 
     void addToScore(int newScore);
     void checkClearedBlocks();
+
     bool replaceBlock(string blockType);
-    void setNextBlock();
 
     void levelUp();
     void levelDown();
     void restart();
     void hint();
-    void random();
-    void norandom();
     bool validateCoord(vector<pair<int,int>> coordToCheck);
-    void getNextBlock();
-    void setLevel(shared_ptr<Level> level);
     void moveBlock(vector<pair<int,int>> coordToCheck);
 
+
     void setXW();
+
+    friend std::ostream &operator<<(std::ostream &out, const QuadrisBoard &qb);
 };
 
 #endif

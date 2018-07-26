@@ -42,7 +42,6 @@ public:
     int getStartLevel();
     void setStartLevel(int level);
 
-    void renameCommand();
 
     ~Interpreter();
 

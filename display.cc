@@ -22,3 +22,4 @@ void DisplayType::printT(bool showHidden, char empty) {
 		quadrisboard->printText(showHidden, empty);
 	}
 }
+
