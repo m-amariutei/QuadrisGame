@@ -39,7 +39,7 @@ QuadrisBoard::~QuadrisBoard() {
 
 void QuadrisBoard::setXW() {
 	cout<<"QuadrisBoard::setXW"<<endl;
-	xw = new Xwindow();
+	xw = new Xwindow(330, 500);
 	cout<<"QuadrisBoard::setXW done"<<endl;
 }
 
@@ -132,6 +132,19 @@ void QuadrisBoard::printGraphic(bool seeInvisible) {
 	int begRow = NUM_ROWS_INVISIBLE;
 	if(seeInvisible) begRow = 0;
 
+	//int x_margin = 50;
+	//int y_margin = 50;
+	  //string lvl = "Level: ";
+	  //lvl.append(to_string(level->getLevel()));
+	  //cout<<lvl<<endl;
+	  //xw->drawBigString(x_margin, y_margin, lvl);
+	  //string scr = "Score:";
+	  //xw->drawString(x_margin, y_margin + 30, scr.append(10 - to_string(score).length(), ' ').append(to_string(score)));
+	  //string hscr = "Hi Score:";
+	  //xw->drawString(x_margin, y_margin + 60, hscr.append(7 - to_string(highScore).length(), ' ').append(to_string(highScore)));
+  //char 
+  //xw.drawString(x_margin, y_margin + 90, "Next:");
+
 	for (int i = begRow; i < HEIGHT; i++) {
 
 		for(int j = 0; j < WIDTH; j++) {
@@ -140,8 +153,8 @@ void QuadrisBoard::printGraphic(bool seeInvisible) {
 			int colour = Xwindow::Black;
 			int x = board.at(i).at(j)->getXValue();
 			int y = board.at(i).at(j)->getYValue();
-			int xMargin = 25;
-			int yMargin = 25;
+			int xMargin = 0;
+			int yMargin = -50;
 
 			if(block != nullptr) {
 				colour = getColour(block->getType());
