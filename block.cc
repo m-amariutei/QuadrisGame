@@ -121,9 +121,9 @@ bool Block::clockwise() {
     pair<int,int> Ys = getMinMaxElements(false);
 
     vector<int> values;
-    values.push_back(Xs.first);
+    values.push_back(Xs.first+1);
     values.push_back(Ys.second);
-    values.push_back(Xs.second);
+    values.push_back(Xs.second-1);
     values.push_back(Ys.second);
     return rotate(values);
 }

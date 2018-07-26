@@ -33,7 +33,10 @@ void Interpreter::startGame() {
     board->getNextBlock();
     board->getCurrentBlock()->down();
     board->getCurrentBlock()->down();
-    board->getCurrentBlock()->down();
+    if(board->getCurrentBlock()->getType() != 'T' &&
+        board->getCurrentBlock()->getType() != 'S') {
+        board->getCurrentBlock()->down();
+    }
 
     string nextCommand;
     display->print(true, '-');   //TODO: display->print(false, ' ')
@@ -70,33 +73,6 @@ void Interpreter::startGame() {
             cout<<"Trying to replace block"<<endl;
             bool replace = board->replaceBlock(nextCommand);
             //don't drop
-
-            /*
-            if(replace) {
-                if (board->isBlockStuck()) {
-                    cout << "Block is stuck" << endl;
-                    if (board->isLost()) {
-                        cout << "Game Over" << endl;
-                        display->print(true, '-');   //TODO: display->print(false, ' ')
-                        return;
-                    }
-
-                    for (int i = 0; i < HEIGHT; i++) {
-                        if (board->isFullRow(i)) {
-                            cout << "Row " << i << " is full" << endl;
-                            board->clearRow(i);
-                        }
-                    }
-                    board->getNextBlock();
-                    board->getCurrentBlock()->down();
-                    board->getCurrentBlock()->down();
-                    board->getCurrentBlock()->down();
-                    if (checkIfLost()) {
-                        return;
-                    }
-                }
-            }
-            */
         }
 
         else {
@@ -137,7 +113,10 @@ void Interpreter::startGame() {
                     board->getNextBlock();
                     board->getCurrentBlock()->down();
                     board->getCurrentBlock()->down();
-                    board->getCurrentBlock()->down();
+                    if(board->getCurrentBlock()->getType() != 'T' &&
+                        board->getCurrentBlock()->getType() != 'S') {
+                        board->getCurrentBlock()->down();
+                    }
                     if (checkIfLost()) {
                         return;
                     }
@@ -159,7 +138,7 @@ void Interpreter::startGame() {
 
                     for (int i = 0; i < HEIGHT; i++) {
                         if (board->isFullRow(i)) {
-                            cout << "Row " << i << " is full" << endl;
+                            //cout << "Row " << i << " is full" << endl;
                             board->clearRow(i);
                             cleared++;
                         }
@@ -177,7 +156,10 @@ void Interpreter::startGame() {
                     board->getNextBlock();
                     board->getCurrentBlock()->down();
                     board->getCurrentBlock()->down();
-                    board->getCurrentBlock()->down();
+                    if(board->getCurrentBlock()->getType() != 'T' &&
+                        board->getCurrentBlock()->getType() != 'S') {
+                        board->getCurrentBlock()->down();
+                    }
                     if (checkIfLost()) {
                         return;
                     }
